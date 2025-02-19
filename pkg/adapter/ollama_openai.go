@@ -1,5 +1,3 @@
-// nolint:unused
-
 package adapter
 
 import (
