@@ -171,7 +171,7 @@ func createModelToServiceMap(config Configuration) map[string][]ModelDetails {
 
 					//modelNameLower := strings.ToLower(modelName)
 					modelToService[modelName] = append(modelToService[modelName], detail)
-					for k, _ := range detail.ModelRedirect {
+					for k := range detail.ModelRedirect {
 						modelToService[k] = append(modelToService[k], detail)
 					}
 				}

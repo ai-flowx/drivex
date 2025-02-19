@@ -220,7 +220,7 @@ func convertError(hunyuanError *hunyuan.ErrorMsg) *myopenai.ErrorDetail {
 // 辅助函数：转换Message
 func convertHYMessage(hunyuanMessage hunyuan.Message) myopenai.ResponseMessage {
 	toolCalls := make([]myopenai.ToolCall, len(hunyuanMessage.ToolCalls))
-	for i, _ := range hunyuanMessage.ToolCalls {
+	for i := range hunyuanMessage.ToolCalls {
 		index := i
 		call := hunyuanMessage.ToolCalls[index]
 		toolCalls[index] = myopenai.ToolCall{
@@ -245,7 +245,7 @@ func convertHYMessage(hunyuanMessage hunyuan.Message) myopenai.ResponseMessage {
 // 辅助函数：转换Message
 func convertHYDelta(hunyuanDelta hunyuan.Delta) myopenai.ResponseDelta {
 	toolCalls := make([]myopenai.ToolCall, len(hunyuanDelta.ToolCalls))
-	for i, _ := range hunyuanDelta.ToolCalls {
+	for i := range hunyuanDelta.ToolCalls {
 		index := i
 		call := hunyuanDelta.ToolCalls[index]
 		toolCalls[index] = myopenai.ToolCall{

@@ -24,8 +24,8 @@ func DeepCopyGeminiRequest(original *googlegemini.GeminiRequest) (*googlegemini.
 		return nil, err
 	}
 
-	for i, _ := range copyReq.Contents {
-		for j, _ := range copyReq.Contents[i].Parts {
+	for i := range copyReq.Contents {
+		for j := range copyReq.Contents[i].Parts {
 			if copyReq.Contents[i].Parts[j].InlineData != nil {
 				d := "..."
 				copyReq.Contents[i].Parts[j].InlineData.Data = d
