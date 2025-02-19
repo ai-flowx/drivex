@@ -62,7 +62,7 @@ func handleQianFanStreamRequest(c *gin.Context, client *http.Client, apiKey, sec
 			return
 		}
 
-		c.Writer.WriteString("data: " + string(respData) + "\n\n")
+		_, _ = c.Writer.WriteString("data: " + string(respData) + "\n\n")
 		c.Writer.(http.Flusher).Flush()
 	})
 

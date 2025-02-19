@@ -31,14 +31,14 @@ type TranslationV1Response struct {
 // translateHandler 处理翻译请求的函数
 func TranslateV1Handler(c *gin.Context) {
 	// 处理 Authorization 验证
-	token := c.GetHeader("Authorization")
-	if token == "" {
-		token = c.Query("token")
-		if token == "" {
-			//c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			//return
-		}
-	}
+	//token := c.GetHeader("Authorization")
+	//if token == "" {
+	//	token = c.Query("token")
+	//	if token == "" {
+	//		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+	//		return
+	//	}
+	//}
 
 	// 绑定请求 JSON 数据
 	var req TranslationV1Request
@@ -91,6 +91,4 @@ func TranslateV1Handler(c *gin.Context) {
 		c.JSON(http.StatusOK, response)
 		return
 	}
-
-	return
 }

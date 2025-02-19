@@ -156,5 +156,4 @@ func CozecnV3ReponseToOpenAIResponseStream(resp *streammode.EventData) *myopenai
 		//Error:   errorDetail,
 		Usage: &usage,
 	}
-	return nil
 }

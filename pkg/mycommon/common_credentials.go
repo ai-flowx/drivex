@@ -10,7 +10,7 @@ import (
 func GetACredentials(s *config.ModelDetails, model string) (map[string]interface{}, string) {
 	// 检查是否有多个凭据列表可用
 	var credID string
-	if s.CredentialList != nil && len(s.CredentialList) > 0 {
+	if len(s.CredentialList) > 0 {
 		key := s.ServiceID + "credentials"
 
 		index := config.GetLBIndex(config.LoadBalancingStrategy, key, len(s.CredentialList))

@@ -134,7 +134,7 @@ func handleClaudeStreamResponse(c *gin.Context, resp *http.Response, oaiReq *ope
 		if len(lineStr) == 0 {
 			// 完整的事件消息读取完毕，发送SSE消息
 			if eventBuilder.Len() > 0 && dataBuilder.Len() > 0 {
-				processClaudeStreamEvent(c, eventBuilder.String(), dataBuilder.String(), oaiReqParam.ClientModel)
+				_ = processClaudeStreamEvent(c, eventBuilder.String(), dataBuilder.String(), oaiReqParam.ClientModel)
 				// 重置builders
 				eventBuilder.Reset()
 				dataBuilder.Reset()

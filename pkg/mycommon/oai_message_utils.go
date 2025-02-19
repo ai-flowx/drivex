@@ -113,7 +113,7 @@ func NormalizeMessages(oaiReqMessage []openai.ChatCompletionMessage, keepAllSyst
 	// 遍历消息数组
 	for i, msg := range oaiReqMessage {
 		role := strings.ToLower(msg.Role)
-		if keepAllSystem == false && role == "system" && i > 0 {
+		if !keepAllSystem && role == "system" && i > 0 {
 			continue
 		}
 

@@ -18,7 +18,7 @@ func Chat(token string, chatRequest *common.ChatRequest, httpTransport *http.Tra
 	}
 
 	var respJson Response
-	json.Unmarshal(respData, &respJson)
+	_ = json.Unmarshal(respData, &respJson)
 
 	log.Println(respJson)
 

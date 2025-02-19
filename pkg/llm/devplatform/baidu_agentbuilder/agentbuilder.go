@@ -18,6 +18,7 @@ import (
 )
 
 // 定义一个全局缓存对象
+// nolint: unused
 var tokenCache = cache.New(5*time.Minute, 10*time.Minute)
 
 // AccessToken 定义 access_token 的结构
@@ -28,6 +29,7 @@ type AccessToken struct {
 }
 
 // getAccessToken 获取 access_token，如果缓存中存在且未过期，则使用缓存中的 token，否则重新获取
+// nolint: unused
 func getAccessToken(clientID, clientSecret string) (string, error) {
 	// 尝试从缓存中获取 access_token
 	if token, found := tokenCache.Get("access_token"); found {
@@ -51,6 +53,7 @@ func getAccessToken(clientID, clientSecret string) (string, error) {
 }
 
 // fetchAccessTokenFromAPI 通过 API 获取 access_token
+// nolint: unused
 func fetchAccessTokenFromAPI(clientID, clientSecret string) (*AccessToken, error) {
 	baseURL := "https://openapi.baidu.com/oauth/2.0/token"
 	params := url.Values{}

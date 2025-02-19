@@ -49,7 +49,7 @@ func handleResponse(resp *http.Response) error {
 		}
 
 		mylog.Logger.Info("Response body", zap.String("body", string(body)))
-		return fmt.Errorf(string(body))
+		return fmt.Errorf("%s", string(body))
 	}
 	return nil
 }

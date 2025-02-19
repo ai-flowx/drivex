@@ -89,9 +89,6 @@ func EmbeddingsHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, oaiResp)
-
-	return
-
 }
 
 func setupLimiter(s *config.ModelDetails, l *config.Limit, model string) (*mylimiter.Limiter, int) {

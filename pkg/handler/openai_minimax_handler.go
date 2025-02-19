@@ -85,10 +85,7 @@ func OpenAI2MinimaxHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 
 			// 去掉行尾的换行符
 			line = strings.TrimSpace(line)
-			if strings.HasPrefix(line, "data: ") {
-				line = strings.TrimPrefix(line, "data: ")
-			}
-
+			line = strings.TrimPrefix(line, "data: ")
 			if line == "" {
 				// 忽略空行
 				continue
@@ -97,7 +94,7 @@ func OpenAI2MinimaxHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 			mylog.Logger.Info(line)
 
 			var minimaxresp minimax.MinimaxResponse
-			json.Unmarshal([]byte(line), &minimaxresp)
+			_ = json.Unmarshal([]byte(line), &minimaxresp)
 
 			oaiRespStream := adapter.MinimaxResponseToOpenAIStreamResponse(&minimaxresp)
 			oaiRespStream.ID = id.String()
@@ -114,7 +111,7 @@ func OpenAI2MinimaxHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 					errInfo, _ := json.Marshal(oaiRespStream.Error)
 					return errors.New(string(errInfo))
 				} else {
-					c.Writer.WriteString("data: " + string(respData) + "\n\n")
+					_, _ = c.Writer.WriteString("data: " + string(respData) + "\n\n")
 					c.Writer.(http.Flusher).Flush()
 				}
 			}
@@ -150,7 +147,7 @@ func OpenAI2MinimaxHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 		mylog.Logger.Info(string(bodyData))
 
 		var minimaxresp minimax.MinimaxResponse
-		json.Unmarshal(bodyData, &minimaxresp)
+		_ = json.Unmarshal(bodyData, &minimaxresp)
 		//mylog.Logger.Info((minimaxresp)
 		myresp := adapter.MinimaxResponseToOpenAIResponse(&minimaxresp)
 		myresp.Model = oaiReqParam.ClientModel

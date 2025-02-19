@@ -80,7 +80,7 @@ func OpenAI2AliyunDashScopeHandler(c *gin.Context, oaiReqParam *OAIRequestParam)
 		}
 
 		var resp common_btype.DSBtypeResponseBody
-		json.Unmarshal(respJson, &resp)
+		_ = json.Unmarshal(respJson, &resp)
 
 		if oaiReq.Stream {
 			utils.SetEventStreamHeaders(c)
@@ -138,7 +138,7 @@ func OpenAI2AliyunDashScopeHandler(c *gin.Context, oaiReqParam *OAIRequestParam)
 				mylog.Logger.Debug("OpenAI2AliyunDashScopeHandler|utils.SendSSERequest", zap.String("data", data))
 
 				var dsResp ds_com_resp.ModelStreamResponse
-				json.Unmarshal([]byte(data), &dsResp)
+				_ = json.Unmarshal([]byte(data), &dsResp)
 
 				prevContent := aliyun_dashscope_adapter.GetStreamResponseContent(dsLastestStreamResp)
 				oaiStreamResp := aliyun_dashscope_adapter.DashScopeCommonResponseToOpenAIStreamResponse(&dsResp, prevContent)
@@ -177,7 +177,7 @@ func OpenAI2AliyunDashScopeHandler(c *gin.Context, oaiReqParam *OAIRequestParam)
 			}
 
 			var commResp ds_com_resp.ModelResponse
-			json.Unmarshal(respJson, &commResp)
+			_ = json.Unmarshal(respJson, &commResp)
 
 			oaiResp := aliyun_dashscope_adapter.DashScopeCommonResponseToOpenAIResponse(&commResp)
 			//待完成

@@ -1,3 +1,5 @@
+// nolint:unused
+
 package adapter
 
 import (
@@ -87,6 +89,7 @@ func OllamaResponseToOpenAIResponse(resp *ollama.ChatResponse) *myopenai.OpenAIR
 	}
 }
 
+// nolint: unused
 func determineFinishReason(done bool) string {
 	if done {
 		return stopFinish

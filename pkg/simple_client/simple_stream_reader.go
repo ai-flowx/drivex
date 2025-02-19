@@ -45,7 +45,7 @@ func (crw *CustomResponseWriter) Write(data []byte) (int, error) {
 
 func (crw *CustomResponseWriter) WriteHeader(statusCode int) {
 	crw.status = statusCode // Store status code
-	crw.writer.Write([]byte(fmt.Sprintf("HTTP/1.1 %d %s\r\n", statusCode, http.StatusText(statusCode))))
+	_, _ = crw.writer.Write([]byte(fmt.Sprintf("HTTP/1.1 %d %s\r\n", statusCode, http.StatusText(statusCode))))
 }
 
 func (crw *CustomResponseWriter) WriteString(s string) (int, error) {

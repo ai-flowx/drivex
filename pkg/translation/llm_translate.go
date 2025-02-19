@@ -13,6 +13,7 @@ import (
 	"simple-one-api/pkg/simple_client"
 )
 
+// nolint: unused
 func createLLMTranslationPromptJson(srcText string, srcLang string, targetLang string) string {
 	transReq := TranslationV1Request{
 		Text:       srcText,

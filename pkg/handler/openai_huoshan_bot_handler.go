@@ -225,7 +225,7 @@ func writeHuoshanBotStreamResponse(c *gin.Context, oaiRespStream *myopenai.OpenA
 		return errors.New("error in response")
 	}
 
-	c.Writer.WriteString("data: " + string(respData) + "\n\n")
+	_, _ = c.Writer.WriteString("data: " + string(respData) + "\n\n")
 	c.Writer.(http.Flusher).Flush()
 
 	return nil

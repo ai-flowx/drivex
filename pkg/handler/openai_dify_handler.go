@@ -25,8 +25,7 @@ func OpenAI2DifyHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 
 	apiKey, _ := utils.GetStringFromMap(credentials, config.KEYNAME_API_KEY)
 
-	if oaiReq.Stream == false {
-
+	if !oaiReq.Stream {
 		difyResp, err := chat_message_request.CallChatMessagesNoneStreamMode(difyReq, apiKey, nil)
 		if err != nil {
 			mylog.Logger.Error(err.Error())

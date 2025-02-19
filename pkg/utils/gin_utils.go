@@ -16,7 +16,7 @@ func SetEventStreamHeaders(c *gin.Context) {
 }
 
 func SendOpenAIStreamEOFData(c *gin.Context) {
-	c.Writer.WriteString("data: [DONE]\n\n")
+	_, _ = c.Writer.WriteString("data: [DONE]\n\n")
 	c.Writer.(http.Flusher).Flush()
 }
 

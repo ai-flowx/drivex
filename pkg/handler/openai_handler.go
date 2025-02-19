@@ -151,8 +151,6 @@ func OpenAIHandler(c *gin.Context) {
 	mycommon.LogChatCompletionRequest(oaiReq)
 
 	HandleOpenAIRequest(c, &oaiReq)
-
-	return
 }
 
 func HandleOpenAIRequest(c *gin.Context, oaiReq *openai.ChatCompletionRequest) {
@@ -193,8 +191,6 @@ func HandleOpenAIRequest(c *gin.Context, oaiReq *openai.ChatCompletionRequest) {
 			//convert message
 			adapter.OpenAIMultiContentRequestToOpenAIContentRequest(oaiReq)
 			mylog.Logger.Info("", zap.Any("oaiReq", oaiReq))
-		} else {
-
 		}
 	}
 

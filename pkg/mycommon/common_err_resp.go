@@ -29,7 +29,7 @@ func CheckStatusCode(resp *http.Response) error {
 			zap.String("body", string(errMsg)))
 
 		// Returning a new error with the status code and the body message
-		return errors.New(fmt.Sprintf("status %d: %s", resp.StatusCode, string(errMsg)))
+		return fmt.Errorf("status %d: %s", resp.StatusCode, string(errMsg))
 	}
 	return nil
 }

@@ -34,5 +34,5 @@ func Setup(configName string) error {
 }
 
 func Cleanup() {
-	mylog.Logger.Sync() // Ensure all logs are flushed properly
+	_ = mylog.Logger.Sync() // Ensure all logs are flushed properly
 }

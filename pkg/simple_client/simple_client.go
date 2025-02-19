@@ -56,7 +56,7 @@ func (c *SimpleClient) CreateChatCompletion(
 	// 解析响应
 
 	if w.Code >= http.StatusBadRequest {
-		err = errors.New(string(w.Body.Bytes()))
+		err = errors.New(w.Body.String())
 		return
 	}
 

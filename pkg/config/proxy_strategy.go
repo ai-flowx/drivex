@@ -94,7 +94,7 @@ func GetConfProxyTransport() (string, string, *http.Transport, error) {
 		if len(GProxyConf.Socks5Proxy) >= 7 && GProxyConf.Socks5Proxy[:7] == "socks5:" {
 			proxyURL, err := url.Parse(GProxyConf.Socks5Proxy)
 			if err != nil {
-				return "", "", nil, errors.New(fmt.Sprintf("error parsing proxy URL: %v\n", err))
+				return "", "", nil, fmt.Errorf("error parsing proxy URL: %v\n", err)
 			}
 			proxyAddr = proxyURL.Host
 		} else {

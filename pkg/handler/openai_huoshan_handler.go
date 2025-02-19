@@ -84,8 +84,6 @@ func OpenAI2HuoShanHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 			return handleSingleHuoShanRequest(ctx, c, client, huoshanReq, oaiReqParam)
 		}
 	}
-
-	return nil
 }
 
 func prepareHuoshanRequest(oaiReq *openai.ChatCompletionRequest, s *config.ModelDetails) model.ChatCompletionRequest {

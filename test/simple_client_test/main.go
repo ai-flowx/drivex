@@ -50,10 +50,6 @@ func testStream() error {
 
 		fmt.Printf("%s", chatResp.Choices[0].Delta.Content)
 	}
-
-	fmt.Println("")
-
-	return nil
 }
 
 func testNoneStream() {
@@ -91,7 +87,7 @@ func main() {
 	defer initializer.Cleanup()
 
 	fmt.Println("stream mode===========")
-	testStream()
+	_ = testStream()
 	fmt.Println("none stream mode===========")
 	testNoneStream()
 }

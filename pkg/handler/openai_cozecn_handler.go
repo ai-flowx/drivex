@@ -84,7 +84,7 @@ func OpenAI2CozecnHandler(c *gin.Context, oaiReqParam *OAIRequestParam) error {
 	} else {
 		cozeChatReq := adapter.OpenAIRequestToCozecnV3Request(oaiReq)
 		mylog.Logger.Info("cozeChatReq", zap.Any("cozeChatReq", cozeChatReq))
-		if oaiReq.Stream == false {
+		if !oaiReq.Stream {
 
 			cozeChatResp, err := nonestream.ChatWithNoneStream(secretToken, cozeChatReq, oaiReqParam.httpTransport, int(3*time.Minute))
 			if err != nil {
