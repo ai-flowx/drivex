@@ -28,6 +28,7 @@ func NewCustomResponseWriter(w io.Writer) *CustomResponseWriter {
 	}
 }
 
+// nolint: staticcheck
 func (crw *CustomResponseWriter) CloseNotify() <-chan bool {
 	if notifier, ok := crw.writer.(http.CloseNotifier); ok {
 		return notifier.CloseNotify()
