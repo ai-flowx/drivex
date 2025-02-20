@@ -1,73 +1,37 @@
 {
-  "debug": false,
+  "server_port": ":9090",
   "load_balancing": "random",
+  "debug": false,
   "services": {
-    "xinghuo": [
+    "aliyun": [
       {
-        "models": ["spark-lite"],
+        "models": ["deepseek-r1"],
         "enabled": true,
         "credentials": {
-          "appid": "xxx",
-          "api_key": "xxx",
-          "api_secret": "xxx"
-        }
+          "api_key": "key"
+        },
+        "server_url":"https://dashscope.aliyuncs.com/compatible-mode/v1"
       }
     ],
-    "qianfan": [
+    "siliconflow": [
       {
-        "models": ["yi_34b_chat","ERNIE-Speed-8K","ERNIE-Speed-128K","ERNIE-Lite-8K","ERNIE-Lite-8K-0922","ERNIE-Tiny-8K"],
+        "models": ["deepseek-ai/DeepSeek-R1-Distill-Llama-8B"],
         "enabled": true,
         "credentials": {
-          "api_key": "xxx",
-          "secret_key": "xxx"
-        }
+          "api_key": "key"
+        },
+        "server_url":"https://api.siliconflow.cn/v1"
       }
     ],
-    "hunyuan": [
+    "volcengine": [
       {
-        "models": ["hunyuan-lite"],
+        "models": ["ep-20240612090709-hzjz5"],
         "enabled": true,
         "credentials": {
-          "secret_id": "xxx",
-          "secret_key": "xxx"
-        }
-      }
-    ],
-    "openai": [
-      {
-        "models": ["deepseek-chat"],
-        "enabled": true,
-        "credentials": {
-          "api_key": "xxx"
+          "access_key": "key",
+          "secret_key": "key"
         },
-        "server_url":"https://api.deepseek.com/v1"
-      },
-      {
-        "models": ["@cf/meta/llama-2-7b-chat-int8"],
-        "enabled": true,
-        "credentials": {
-          "api_key": "xxx"
-        },
-        "server_url": "https://api.cloudflare.com/client/v4/accounts/xxx/ai/v1/chat/completions"
-      },
-      {
-        "models": ["glm-4","glm-3-turbo"],
-        "enabled": true,
-        "credentials": {
-          "api_key": "xxx"
-        },
-        "server_url":"https://open.bigmodel.cn/api/paas/v4/chat/completions"
-      }
-    ],
-    "minimax": [
-      {
-        "models": ["abab6-chat"],
-        "enabled": true,
-        "credentials": {
-          "group_id": "1782658868262748467",
-          "api_key": "xxx"
-        },
-        "server_url":"https://api.minimax.chat/v1/text/chatcompletion_pro"
+        "server_url":"https://ark.cn-beijing.volces.com/api/v3"
       }
     ]
   }

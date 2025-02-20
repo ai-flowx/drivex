@@ -27,16 +27,55 @@
 
 
 
-## Usage
+## Run
 
 ```
+./bin/drivex /path/to/config.json
 ```
 
 
 
-## Settings
+## Config
 
 ```json
+{
+  "server_port": ":9090",
+  "load_balancing": "random",
+  "debug": false,
+  "services": {
+    "aliyun": [
+      {
+        "models": ["deepseek-r1"],
+        "enabled": true,
+        "credentials": {
+          "api_key": "key"
+        },
+        "server_url":"https://dashscope.aliyuncs.com/compatible-mode/v1"
+      }
+    ],
+    "siliconflow": [
+      {
+        "models": ["deepseek-ai/DeepSeek-R1-Distill-Llama-8B"],
+        "enabled": true,
+        "credentials": {
+          "api_key": "key"
+        },
+        "server_url":"https://api.siliconflow.cn/v1"
+      }
+    ],
+    "volcengine": [
+      {
+        "models": ["ep-20240612090709-hzjz5"],
+        "enabled": true,
+        "credentials": {
+          "access_key": "key",
+          "secret_key": "key"
+        },
+        "server_url":"https://ark.cn-beijing.volces.com/api/v3"
+      }
+    ]
+  }
+}
 ```
 
 
