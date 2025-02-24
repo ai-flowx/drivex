@@ -1,13 +1,15 @@
 package config
 
 import (
+	"crypto/rand"
 	"hash/fnv"
-	"math/rand"
-	"simple-one-api/pkg/mycomdef"
+	"math/big"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/ai-flowx/drivex/pkg/mycomdef"
 )
 
 var (
@@ -19,7 +21,11 @@ var (
 func getRandomIndex(n int) int {
 	randLock.Lock()
 	defer randLock.Unlock()
-	return rand.Intn(n)
+
+	_max := big.NewInt(int64(n))
+	num, _ := rand.Int(rand.Reader, _max)
+
+	return int(num.Int64())
 }
 
 func getRoundRobinIndex(modelName string, n int) int {
@@ -37,29 +43,31 @@ func getRoundRobinIndex(modelName string, n int) int {
 		modelLock.Unlock()
 	}
 
-	// Increment index atomically and get the server
 	newIdx := atomic.AddUint32(idx, 1)
+
 	return int(newIdx) % n
 }
 
 func getHashIndex(key string, n int) int {
-	// 包含到毫秒的时间戳
 	timestamp := time.Now().Format("2006-01-02 15:04:05.999")
+
 	h := fnv.New32a()
-	h.Write([]byte(key + timestamp))
+	_, _ = h.Write([]byte(key + timestamp))
+
 	return int(h.Sum32()) % n
 }
 
-func GetLBIndex(lbStrategy string, key string, length int) int {
+func GetLBIndex(lbStrategy, key string, length int) int {
 	lbs := strings.ToLower(lbStrategy)
+
 	switch lbs {
-	case mycomdef.KEYNAME_FIRST:
+	case mycomdef.KeynameFirst:
 		return 0
-	case mycomdef.KEYNAME_RANDOM, mycomdef.KEYNAME_RAND:
+	case mycomdef.KeynameRandom, mycomdef.KeynameRand:
 		return getRandomIndex(length)
-	case mycomdef.KEYNAME_ROUND_ROBIN, mycomdef.KEYNAME_RR:
+	case mycomdef.KeynameRoundRobin, mycomdef.KeynameRr:
 		return getRoundRobinIndex(key, length)
-	case mycomdef.KEYNAME_HASH:
+	case mycomdef.KeynameHash:
 		return getHashIndex(key, length)
 	default:
 		return getRandomIndex(length)

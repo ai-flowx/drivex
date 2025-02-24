@@ -22,7 +22,7 @@
 ## Build
 
 ```bash
-./script/build.sh
+make build
 ```
 
 

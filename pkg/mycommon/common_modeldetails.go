@@ -1,32 +1,25 @@
 package mycommon
 
 import (
-	"simple-one-api/pkg/config"
-	"simple-one-api/pkg/mycomdef"
+	"github.com/ai-flowx/drivex/pkg/config"
+	"github.com/ai-flowx/drivex/pkg/mycomdef"
 )
 
-// 通用的限流器详情获取函数
-func getLimitDetails(limit config.Limit) (string, float64, int) {
+func getLimitDetails(limit config.Limit) (name string, qps float64, timeout int) {
 	switch {
 	case limit.QPS > 0:
-		return mycomdef.KEYNAME_QPS, limit.QPS, limit.Timeout
+		return mycomdef.KeynameQps, limit.QPS, limit.Timeout
 	case limit.QPM > 0:
-		return mycomdef.KEYNAME_QPM, limit.QPM, limit.Timeout
+		return mycomdef.KeynameQpm, limit.QPM, limit.Timeout
 	case limit.RPM > 0:
-		return mycomdef.KEYNAME_QPM, limit.RPM, limit.Timeout
+		return mycomdef.KeynameQpm, limit.RPM, limit.Timeout
 	case limit.Concurrency > 0:
-		return mycomdef.KEYNAME_CONCURRENCY, limit.Concurrency, limit.Timeout
+		return mycomdef.KeynameConcurrency, limit.Concurrency, limit.Timeout
 	default:
-		return "", 0, 0 // 默认返回
+		return "", 0, 0
 	}
 }
 
-// 获取服务模型的限流详情
-func GetServiceModelDetailsLimit(s *config.ModelDetails) (string, float64, int) {
+func GetServiceModelDetailsLimit(s *config.ModelDetails) (name string, qps float64, timeout int) {
 	return getLimitDetails(s.Limit)
-}
-
-// 获取服务限流器的限流详情
-func GetServiceLimiterDetailsLimit(l *config.Limit) (string, float64, int) {
-	return getLimitDetails(*l)
 }

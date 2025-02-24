@@ -4,22 +4,23 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io"
+	"net/http"
+	"sync"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/sashabaranov/go-openai"
 	"go.uber.org/zap"
-	"io"
-	"net/http"
-	"simple-one-api/pkg/mylog"
-	"simple-one-api/pkg/simple_client"
-	"sync"
+
+	"github.com/ai-flowx/drivex/pkg/mylog"
+	"github.com/ai-flowx/drivex/pkg/simple_client"
 )
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-	// 注意：生产环境下应更严格地检查来源
 	CheckOrigin: func(r *http.Request) bool {
 		return true // 允许所有CORS请求
 	},
@@ -47,7 +48,10 @@ func WSMultiModelCallHandler(c *gin.Context) {
 		mylog.Logger.Error("Upgrade failed", zap.Error(err))
 		return
 	}
-	defer conn.Close()
+
+	defer func(conn *websocket.Conn) {
+		_ = conn.Close()
+	}(conn)
 
 	requestData, err := readAndUnmarshalClientMessage(conn)
 	if err != nil {
@@ -68,7 +72,7 @@ func WSMultiModelCallHandler(c *gin.Context) {
 
 	for _, modelName := range requestData.Models {
 		wg.Add(1)
-		go handleModelRequest(&wg, &mu, conn, modelName, baseRequest, msgId)
+		go handleModelRequest(&wg, &mu, conn, modelName, &baseRequest, msgId)
 	}
 
 	wg.Wait()
@@ -79,12 +83,15 @@ func readAndUnmarshalClientMessage(conn *websocket.Conn) (*MMFormData, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	mylog.Logger.Debug("Received message from client", zap.String("message", string(message)))
 
 	var requestData MMFormData
+
 	if err := json.Unmarshal(message, &requestData); err != nil {
 		return nil, err
 	}
+
 	mylog.Logger.Debug("Received models", zap.Any("models", requestData.Models))
 
 	return &requestData, nil
@@ -108,10 +115,12 @@ func constructBaseRequest(requestData *MMFormData) openai.ChatCompletionRequest 
 		sysMsg := openai.ChatCompletionMessage{Role: openai.ChatMessageRoleSystem, Content: requestData.System}
 		baseRequest.Messages = append([]openai.ChatCompletionMessage{sysMsg}, baseRequest.Messages...)
 	}
+
 	return baseRequest
 }
 
-func handleModelRequest(wg *sync.WaitGroup, mu *sync.Mutex, conn *websocket.Conn, modelName string, baseRequest openai.ChatCompletionRequest, msgId string) {
+func handleModelRequest(wg *sync.WaitGroup, mu *sync.Mutex, conn *websocket.Conn, modelName string,
+	baseRequest *openai.ChatCompletionRequest, msgId string) {
 	defer wg.Done()
 
 	modelReq := baseRequest
@@ -127,7 +136,8 @@ func handleModelRequest(wg *sync.WaitGroup, mu *sync.Mutex, conn *websocket.Conn
 	processChatStream(conn, chatStream, msgId, mu, modelName)
 }
 
-func processChatStream(conn *websocket.Conn, chatStream *simple_client.SimpleChatCompletionStream, msgId string, mu *sync.Mutex, modelName string) {
+func processChatStream(conn *websocket.Conn, chatStream *simple_client.SimpleChatCompletionStream,
+	msgId string, mu *sync.Mutex, modelName string) {
 	for {
 		chatResp, err := chatStream.Recv()
 		if errors.Is(err, io.EOF) {
@@ -141,9 +151,7 @@ func processChatStream(conn *websocket.Conn, chatStream *simple_client.SimpleCha
 				MsgId:  msgId,
 				Model:  modelName,
 			}
-
 			mylog.Logger.Error("", zap.Any("errResp", errResp))
-
 			mu.Lock()
 			if err := conn.WriteJSON(errResp); err != nil {
 				mylog.Logger.Error("Failed to write JSON response", zap.Error(err))
@@ -151,7 +159,6 @@ func processChatStream(conn *websocket.Conn, chatStream *simple_client.SimpleCha
 				break
 			}
 			mu.Unlock()
-
 			return
 		}
 
@@ -160,14 +167,13 @@ func processChatStream(conn *websocket.Conn, chatStream *simple_client.SimpleCha
 		}
 
 		mylog.Logger.Debug("Received chat response", zap.Any("chatResp", chatResp), zap.Int("len(chatResp.Choices)", len(chatResp.Choices)))
-		if len(chatResp.Choices) > 0 {
 
+		if len(chatResp.Choices) > 0 {
 			resp := MMResp{
 				Result: chatResp.Choices[0].Delta.Content,
 				MsgId:  msgId,
 				Model:  modelName,
 			}
-
 			mu.Lock()
 			if err := conn.WriteJSON(resp); err != nil {
 				mylog.Logger.Error("Failed to write JSON response", zap.Error(err))

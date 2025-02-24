@@ -2,10 +2,10 @@ package myopenai
 
 import (
 	"encoding/json"
-	"simple-one-api/pkg/mycommon"
+
+	"github.com/ai-flowx/drivex/pkg/mycommon"
 )
 
-// RequestBody 定义 API 请求的主体结构
 type OpenAIRequest struct {
 	Model            string             `json:"model"`
 	Messages         []mycommon.Message `json:"messages"`
@@ -28,28 +28,23 @@ type OpenAIRequest struct {
 	User             *string            `json:"user,omitempty"`
 }
 
-// ResponseFormat 定义响应格式的结构
 type ResponseFormat struct {
 	Type string `json:"type"`
 }
 
-// StreamOptions 定义流选项的结构
 type StreamOptions struct {
 	// 详细字段可以根据具体实现需求添加
 }
 
-// Tool 定义工具，如函数
 type Tool struct {
 	Type     string    `json:"type"`
 	Function *Function `json:"function,omitempty"`
 }
 
-// Function 定义函数的结构
 type Function struct {
 	Name string `json:"name"`
 }
 
-// ToolChoice 定义工具选择的结构
 type ToolChoiceFunction struct {
 	Type     string    `json:"type"`
 	Function *Function `json:"function,omitempty"`

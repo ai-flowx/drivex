@@ -2,9 +2,10 @@ package utils
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SetEventStreamHeaders(c *gin.Context) {
@@ -20,7 +21,6 @@ func SendOpenAIStreamEOFData(c *gin.Context) {
 	c.Writer.(http.Flusher).Flush()
 }
 
-// 从Authorization头部中获取API密钥
 func GetAPIKeyFromHeader(c *gin.Context) (string, error) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
@@ -31,5 +31,6 @@ func GetAPIKeyFromHeader(c *gin.Context) (string, error) {
 	if len(parts) != 2 || parts[0] != "Bearer" {
 		return "", errors.New("authorization header not found")
 	}
+
 	return parts[1], nil
 }

@@ -1,0 +1,22 @@
+---
+builds:
+  - id: drivex
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+    dir: .
+    main: main.go
+    binary: drivex
+    flags:
+      - -trimpath
+    ldflags: -s -w
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - Merge pull request
+      - Merge branch

@@ -3,15 +3,24 @@ package mycommon
 import (
 	"errors"
 	"go.uber.org/zap"
-	"simple-one-api/pkg/mylog"
+
+	"github.com/ai-flowx/drivex/pkg/mylog"
 )
 
-const adjustmentFloatValue = 0.01 // 定义调整值为常量
+const (
+	adjustmentFloatValue = 0.01
+)
+
+var (
+	modelParamsMap = map[string]ModelParams{
+		// TBD: FIXME
+	}
+)
 
 type ModelParams struct {
-	TemperatureRange Range // 温度参数范围
-	TopPRange        Range // TopP 参数范围
-	MaxTokens        int   // 最大 tokens 数量
+	TemperatureRange Range
+	TopPRange        Range
+	MaxTokens        int
 }
 
 type Range struct {
@@ -19,90 +28,50 @@ type Range struct {
 	Max float32
 }
 
-// 共享的模型参数配置
-var glmCommonModelParams = ModelParams{
-	TemperatureRange: Range{0.0, 1.0},
-	TopPRange:        Range{0.0, 1.0},
-}
-
-var modelParamsMap = map[string]ModelParams{
-	"glm-4-0520": {
-		TemperatureRange: glmCommonModelParams.TemperatureRange,
-		TopPRange:        glmCommonModelParams.TopPRange,
-		MaxTokens:        4095,
-	},
-	"glm-4": {
-		TemperatureRange: glmCommonModelParams.TemperatureRange,
-		TopPRange:        glmCommonModelParams.TopPRange,
-		MaxTokens:        4095,
-	},
-	"glm-4-air": {
-		TemperatureRange: glmCommonModelParams.TemperatureRange,
-		TopPRange:        glmCommonModelParams.TopPRange,
-		MaxTokens:        4095,
-	},
-	"glm-4-airx": {
-		TemperatureRange: glmCommonModelParams.TemperatureRange,
-		TopPRange:        glmCommonModelParams.TopPRange,
-		MaxTokens:        4095,
-	},
-	"glm-4-flash": {
-		TemperatureRange: glmCommonModelParams.TemperatureRange,
-		TopPRange:        glmCommonModelParams.TopPRange,
-		MaxTokens:        4095,
-	},
-	"glm-3-turbo": {
-		TemperatureRange: glmCommonModelParams.TemperatureRange,
-		TopPRange:        glmCommonModelParams.TopPRange,
-		MaxTokens:        4095,
-	},
-	"glm-4v": {
-		TemperatureRange: Range{0.0, 1.0},
-		TopPRange:        Range{0.0, 1.0},
-		MaxTokens:        1024,
-	},
-}
-
 func GetModelParams(modelName string) (ModelParams, error) {
 	params, ok := modelParamsMap[modelName]
 	if !ok {
 		return ModelParams{}, errors.New("unsupported model")
 	}
+
 	return params, nil
 }
 
-func adjustFloatValue(value, min, max float32) float32 {
+func adjustFloatValue(value, _min, _max float32) float32 {
 	if value < 0 {
 		value = 0
 	}
-	if value < min {
-		value = min + adjustmentFloatValue
-	} else if value >= max {
-		value = max - adjustmentFloatValue
+
+	if value < _min {
+		value = _min + adjustmentFloatValue
+	} else if value >= _max {
+		value = _max - adjustmentFloatValue
 	}
+
 	return value
 }
 
-func AdjustParamsToRange(modelName string, temperature, topP float32, maxTokens int) (float32, float32, int, error) {
+func AdjustParamsToRange(modelName string, temperature, topP float32, maxTokens int) (temp, p float32, tokens int, err error) {
 	params, err := GetModelParams(modelName)
 	if err != nil {
 		return temperature, topP, maxTokens, err
 	}
 
-	temperature = adjustFloatValue(temperature, params.TemperatureRange.Min, params.TemperatureRange.Max)
+	temp = adjustFloatValue(temperature, params.TemperatureRange.Min, params.TemperatureRange.Max)
 
-	topP = adjustFloatValue(topP, params.TopPRange.Min, params.TopPRange.Max)
+	p = adjustFloatValue(topP, params.TopPRange.Min, params.TopPRange.Max)
 
 	if maxTokens < 0 {
-		maxTokens = 0
+		tokens = 0
 	}
+
 	if maxTokens > params.MaxTokens {
-		maxTokens = params.MaxTokens
+		tokens = params.MaxTokens
 	}
 
-	mylog.Logger.Debug("", zap.Float32("adjusted_temperature", temperature),
-		zap.Float32("adjusted_topP", topP),
-		zap.Int("adjusted_maxTokens", maxTokens))
+	mylog.Logger.Debug("", zap.Float32("adjusted_temperature", temp),
+		zap.Float32("adjusted_topP", p),
+		zap.Int("adjusted_maxTokens", tokens))
 
-	return temperature, topP, maxTokens, nil
+	return temp, p, tokens, nil
 }

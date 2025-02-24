@@ -4,14 +4,15 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"go.uber.org/zap"
 	"io"
 	"net/http"
-	"simple-one-api/pkg/mylog"
 	"strings"
+
+	"go.uber.org/zap"
+
+	"github.com/ai-flowx/drivex/pkg/mylog"
 )
 
-// 非SSE的HTTP请求处理函数
 func SendHTTPRequest(apiKey, url string, reqBody []byte, httpTransport *http.Transport) ([]byte, error) {
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
@@ -26,11 +27,15 @@ func SendHTTPRequest(apiKey, url string, reqBody []byte, httpTransport *http.Tra
 	if httpTransport != nil {
 		client.Transport = httpTransport
 	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
-	defer resp.Body.Close()
+
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -45,9 +50,9 @@ func SendHTTPRequest(apiKey, url string, reqBody []byte, httpTransport *http.Tra
 	return respBody, nil
 }
 
-// SSE的HTTP请求处理函数，带回调处理每次接收的数据
 func SendSSERequest(apiKey, url string, reqBody []byte, callback func(data string), httpTransport *http.Transport) error {
 	mylog.Logger.Debug("SendSSERequest", zap.String("url", url))
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
@@ -61,16 +66,22 @@ func SendSSERequest(apiKey, url string, reqBody []byte, callback func(data strin
 	if httpTransport != nil {
 		client.Transport = httpTransport
 	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send request: %w", err)
 	}
-	defer resp.Body.Close()
+
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
 		var errMsg string
 		respBody, err := io.ReadAll(resp.Body)
-		defer resp.Body.Close()
+		defer func(Body io.ReadCloser) {
+			_ = Body.Close()
+		}(resp.Body)
 		if err != nil {
 			mylog.Logger.Error(err.Error())
 		}
@@ -95,11 +106,14 @@ func SendSSERequest(apiKey, url string, reqBody []byte, callback func(data strin
 			callback(data)
 		}
 	}
+
 	return nil
 }
 
-func SendSSERequestWithHttpHeader(apiKey, url string, reqBody []byte, callback func(data string), httpTransport *http.Transport, header map[string]string) error {
+func SendSSERequestWithHttpHeader(apiKey, url string, reqBody []byte, callback func(data string),
+	httpTransport *http.Transport, header map[string]string) error {
 	mylog.Logger.Debug("SendSSERequest", zap.String("url", url))
+
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
@@ -107,7 +121,7 @@ func SendSSERequestWithHttpHeader(apiKey, url string, reqBody []byte, callback f
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", apiKey))
-	//req.Header.Set("Accept", "text/event-stream")
+
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
@@ -116,16 +130,20 @@ func SendSSERequestWithHttpHeader(apiKey, url string, reqBody []byte, callback f
 	if httpTransport != nil {
 		client.Transport = httpTransport
 	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send request: %w", err)
 	}
-	defer resp.Body.Close()
+
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 
 	reader := bufio.NewReader(resp.Body)
+
 	for {
 		line, err := reader.ReadString('\n')
-		//mylog.Logger.Debug("SendSSERequest", zap.String("line", line))
 		if err != nil {
 			break
 		}
@@ -134,5 +152,6 @@ func SendSSERequestWithHttpHeader(apiKey, url string, reqBody []byte, callback f
 			callback(data)
 		}
 	}
+
 	return nil
 }

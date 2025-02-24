@@ -5,55 +5,44 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/sashabaranov/go-openai"
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"simple-one-api/pkg/handler"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sashabaranov/go-openai"
+
+	"github.com/ai-flowx/drivex/pkg/handler"
 )
-
-func init() {
-
-}
 
 type SimpleClient struct {
 }
 
 func NewSimpleClient(authToken string) *SimpleClient {
-	//config := DefaultConfig(authToken)
 	return NewSimpleClientWithConfig()
 }
 
-// NewClientWithConfig creates new OpenAI API client for specified config.
 func NewSimpleClientWithConfig() *SimpleClient {
-	return &SimpleClient{
-		//config: config,
-	}
+	return &SimpleClient{}
 }
 
 func (c *SimpleClient) CreateChatCompletion(
-	ctx context.Context,
-	request openai.ChatCompletionRequest,
+	_ context.Context,
+	request *openai.ChatCompletionRequest,
 ) (response openai.ChatCompletionResponse, err error) {
 	request.Stream = false
 	reqBody, _ := json.Marshal(request)
 	httpReq, _ := http.NewRequest("POST", "/v1/chat/completions", bytes.NewBuffer(reqBody))
 	httpReq.Header.Set("Content-Type", "application/json")
 
-	// 创建Gin的实例和配置路由
 	ginc := gin.New()
 	ginc.POST("/v1/chat/completions", func(ctx *gin.Context) {
-		handler.HandleOpenAIRequest(ctx, &request)
+		handler.HandleOpenAIRequest(ctx, request)
 	})
 
-	// 创建响应记录器
 	w := httptest.NewRecorder()
 
-	// 使用ServeHTTP处理请求
 	ginc.ServeHTTP(w, httpReq)
-
-	// 解析响应
 
 	if w.Code >= http.StatusBadRequest {
 		err = errors.New(w.Body.String())
@@ -66,16 +55,14 @@ func (c *SimpleClient) CreateChatCompletion(
 }
 
 func (c *SimpleClient) CreateChatCompletionStream(
-	ctx context.Context,
-	request openai.ChatCompletionRequest,
+	_ context.Context,
+	request *openai.ChatCompletionRequest,
 ) (stream *SimpleChatCompletionStream, err error) {
 	request.Stream = true
-	// 创建io.Pipe连接
-	reader, writer := io.Pipe()
 
+	reader, writer := io.Pipe()
 	recorder := httptest.NewRecorder()
 
-	// 配置gin的上下文和请求
 	ginc := gin.New()
 	ginc.Use(func(ctx *gin.Context) {
 		crw := NewCustomResponseWriter(writer)
@@ -83,12 +70,13 @@ func (c *SimpleClient) CreateChatCompletionStream(
 		ctx.Next()
 	})
 	ginc.POST("/v1/chat/completions", func(ctx *gin.Context) {
-		handler.HandleOpenAIRequest(ctx, &request)
+		handler.HandleOpenAIRequest(ctx, request)
 	})
 
-	// 模拟发送请求
 	go func() {
-		defer writer.Close()
+		defer func(writer *io.PipeWriter) {
+			_ = writer.Close()
+		}(writer)
 		requestData, _ := json.Marshal(request)
 		httpReq, _ := http.NewRequest("POST", "/v1/chat/completions", bytes.NewBuffer(requestData))
 		httpReq.Header.Set("Content-Type", "application/json")

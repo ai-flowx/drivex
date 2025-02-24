@@ -1,11 +1,13 @@
 package apis
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"simple-one-api/pkg/config"
 	"sort"
 	"time"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/ai-flowx/drivex/pkg/config"
 )
 
 type Model struct {
@@ -17,14 +19,17 @@ type Model struct {
 
 func ModelsHandler(c *gin.Context) {
 	var models []Model
+
 	keys := make([]string, 0, len(config.ModelToService))
 
 	for k := range config.SupportModels {
 		keys = append(keys, k)
 	}
-	sort.Strings(keys) // 对keys进行排序
+
+	sort.Strings(keys)
 
 	t := time.Now()
+
 	for _, k := range keys {
 		models = append(models, Model{
 			ID:      k,
@@ -47,26 +52,9 @@ func ModelsHandler(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"error": "No models found"})
 		return
 	}
+
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"object": "list",
 		"data":   models,
 	})
-}
-
-// RetrieveModelHandler RetrieveModelHandler用于根据模型ID检索模型信息
-func RetrieveModelHandler(c *gin.Context) {
-	modelID := c.Param("model") // 从路径中获取模型ID
-
-	if _, found := config.ModelToService[modelID]; found {
-		model := Model{
-			ID:      "gpt-3.5-turbo-instruct",
-			Object:  "model",
-			Created: time.Now().Unix(),
-			OwnedBy: "openai",
-		}
-		c.IndentedJSON(http.StatusOK, model)
-		return
-	}
-
-	c.IndentedJSON(http.StatusNotFound, gin.H{"error": "Model not found"})
 }

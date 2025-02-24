@@ -5,11 +5,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/sashabaranov/go-openai"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sashabaranov/go-openai"
 )
 
 type CustomResponseWriter struct {
@@ -28,33 +29,34 @@ func NewCustomResponseWriter(w io.Writer) *CustomResponseWriter {
 	}
 }
 
-// nolint: staticcheck
 func (crw *CustomResponseWriter) CloseNotify() <-chan bool {
 	if notifier, ok := crw.writer.(http.CloseNotifier); ok {
 		return notifier.CloseNotify()
 	}
-	// 如果 crw.writer 不支持 CloseNotifier，返回一个永不发送通知的通道
+
 	c := make(chan bool)
 	close(c)
+
 	return c
 }
 
 func (crw *CustomResponseWriter) Write(data []byte) (int, error) {
-	crw.body.Write(data) // Optionally store the body data
+	crw.body.Write(data)
+
 	return crw.writer.Write(data)
 }
 
 func (crw *CustomResponseWriter) WriteHeader(statusCode int) {
-	crw.status = statusCode // Store status code
-	_, _ = crw.writer.Write([]byte(fmt.Sprintf("HTTP/1.1 %d %s\r\n", statusCode, http.StatusText(statusCode))))
+	crw.status = statusCode
+
+	_, _ = fmt.Fprintf(crw.writer, "HTTP/1.1 %d %s\r\n", statusCode, http.StatusText(statusCode))
 }
 
 func (crw *CustomResponseWriter) WriteString(s string) (int, error) {
-	return crw.Write([]byte(s))
+	return crw.WriteString(s)
 }
 
 func (crw *CustomResponseWriter) Header() http.Header {
-	// Mimic the behavior of an http.ResponseWriter if needed
 	return http.Header{}
 }
 
@@ -102,14 +104,8 @@ func (scs *SimpleChatCompletionStream) Recv() (*openai.ChatCompletionStreamRespo
 	data := strings.TrimSpace(string(line))
 	if strings.HasPrefix(data, "data: ") {
 		jsonData := strings.TrimPrefix(data, "data: ")
-		if strings.HasPrefix(jsonData, `{"error":`) {
-			if err := json.Unmarshal([]byte(jsonData), &response); err != nil {
-				return &response, err
-			}
-		} else {
-			if err := json.Unmarshal([]byte(jsonData), &response); err != nil {
-				return &response, err
-			}
+		if err := json.Unmarshal([]byte(jsonData), &response); err != nil {
+			return &response, err
 		}
 		return &response, nil
 	}

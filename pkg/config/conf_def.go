@@ -1,8 +1,10 @@
 package config
 
-var ServiceTimeOut int = 30
+const (
+	ProxyStrategyAll      = "all"
+	ProxyStrategyDefault  = "default"
+	ProxyStrategyDisabled = "disabled"
+	ProxyStrategyForceall = "force_all"
 
-var PROXY_STRATEGY_FORCEALL = "force_all"
-var PROXY_STRATEGY_ALL = "all"
-var PROXY_STRATEGY_DEFAULT = "default"
-var PROXY_STRATEGY_DISABLED = "disabled"
+	ServiceTimeOut = 30
+)
