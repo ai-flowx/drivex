@@ -44,6 +44,9 @@ from litellm.llms.vertex_ai.cost_calculator import cost_router as google_cost_ro
 from litellm.llms.vertex_ai.image_generation.cost_calculator import (
     cost_calculator as vertex_ai_image_cost_calculator,
 )
+from litellm.llms.siliconflow.cost_calculator import (
+    cost_per_token as siliconflow_cost_per_token,
+)
 from litellm.types.llms.openai import HttpxBinaryResponseContent
 from litellm.types.rerank import RerankBilledUnits, RerankResponse
 from litellm.types.utils import (
@@ -283,6 +286,8 @@ def cost_per_token(  # noqa: PLR0915
         return gemini_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "deepseek":
         return deepseek_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "siliconflow":
+        return siliconflow_cost_per_token(model=model, usage=usage_block)
     else:
         model_info = _cached_get_model_info_helper(
             model=model, custom_llm_provider=custom_llm_provider
