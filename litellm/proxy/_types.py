@@ -1161,6 +1161,13 @@ class KeyManagementSettings(LiteLLMPydanticObjectBase):
     Access mode for the secret manager, when write_only will only use for writing secrets
     """
 
+    primary_secret_name: Optional[str] = None
+    """
+    If set, will read secrets from this primary secret in the secret manager
+
+    eg. on AWS you can store multiple secret values as K/V pairs in a single secret
+    """
+
 
 class TeamDefaultSettings(LiteLLMPydanticObjectBase):
     team_id: str
@@ -1963,7 +1970,7 @@ class ProxyException(Exception):
         code: Optional[Union[int, str]] = None,
         headers: Optional[Dict[str, str]] = None,
     ):
-        self.message = message
+        self.message = str(message)
         self.type = type
         self.param = param
 
