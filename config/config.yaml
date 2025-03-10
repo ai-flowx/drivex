@@ -5,3 +5,9 @@ model_list:
       api_base: https://api.siliconflow.cn/v1
       api_key: YOUR_KEY
       api_version: "2025-03-09"
+  - model_name: volcengine-deepseek-v3-241226
+    litellm_params:
+      model: volcengine/deepseek-v3-241226
+      api_base: https://ark.cn-beijing.volces.com/api/v3
+      api_key: YOUR_KEY
+      api_version: "2025-03-10"
