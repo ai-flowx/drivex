@@ -1925,6 +1925,7 @@ class LlmProviders(str, Enum):
     TOPAZ = "topaz"
     ASSEMBLYAI = "assemblyai"
     SILICONFLOW = "siliconflow"
+    VOLCENGINE = "volcengine"
 
 
 # Create a set of all provider values for quick lookup

@@ -220,6 +220,9 @@ def get_llm_provider(  # noqa: PLR0915
                     elif endpoint == "api.siliconflow.cn/v1":
                         custom_llm_provider = "siliconflow"
                         dynamic_api_key = get_secret_str("SILICONFLOW_API_KEY")
+                    elif endpoint == "ark.cn-beijing.volces.com/api/v3":
+                        custom_llm_provider = "volcengine"
+                        dynamic_api_key = get_secret_str("VOLCENGINE_API_KEY")
 
                     if api_base is not None and not isinstance(api_base, str):
                         raise Exception(
@@ -581,6 +584,13 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
                 or "https://api.siliconflow.cn/v1"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("SILICONFLOW_API_KEY")
+    elif custom_llm_provider == "volcengine":
+        api_base = (
+                api_base
+                or get_secret("VOLCENGINE_API_BASE")
+                or "ark.cn-beijing.volces.com/api/v3"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("VOLCENGINE_API_KEY")
     if api_base is not None and not isinstance(api_base, str):
         raise Exception("api base needs to be a string. api_base={}".format(api_base))
     if dynamic_api_key is not None and not isinstance(dynamic_api_key, str):
