@@ -413,7 +413,6 @@ galadriel_models: List = []
 sambanova_models: List = []
 assemblyai_models: List = []
 siliconflow_models: List = []
-volcengine_models: List = []
 
 
 def is_bedrock_pricing_only_model(key: str) -> bool:
@@ -569,8 +568,6 @@ def add_known_models():
             jina_ai_models.append(key)
         elif value.get("litellm_provider") == "siliconflow":
             siliconflow_models.append(key)
-        elif value.get("litellm_provider") == "volcengine":
-            volcengine_models.append(key)
 
 
 add_known_models()
@@ -645,7 +642,6 @@ model_list = (
     + assemblyai_models
     + jina_ai_models
     + siliconflow_models
-    + volcengine_models
 )
 
 model_list_set = set(model_list)
@@ -702,7 +698,6 @@ models_by_provider: dict = {
     "assemblyai": assemblyai_models,
     "jina_ai": jina_ai_models,
     "siliconflow": siliconflow_models,
-    "volcengine": volcengine_models,
 }
 
 # mapping for those models which have larger equivalents
@@ -989,7 +984,6 @@ from .llms.watsonx.completion.transformation import IBMWatsonXAIConfig
 from .llms.watsonx.chat.transformation import IBMWatsonXChatConfig
 from .llms.watsonx.embed.transformation import IBMWatsonXEmbeddingConfig
 from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
-from .llms.volcengine.chat.transformation import VolcengineChatConfig
 from .main import *  # type: ignore
 from .integrations import *
 from .exceptions import (

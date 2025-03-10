@@ -80,7 +80,6 @@ LITELLM_CHAT_PROVIDERS = [
     "lm_studio",
     "galadriel",
     "siliconflow",
-    "volcengine",
 ]
 
 
@@ -142,7 +141,6 @@ openai_compatible_endpoints: List = [
     "api.x.ai/v1",
     "api.galadriel.ai/v1",
     "api.siliconflow.cn/v1",
-    "ark.cn-beijing.volces.com/api/v3",
 ]
 
 
@@ -173,7 +171,6 @@ openai_compatible_providers: List = [
     "lm_studio",
     "galadriel",
     "siliconflow",
-    "volcengine",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`

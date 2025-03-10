@@ -1672,35 +1672,6 @@ def completion(  # type: ignore # noqa: PLR0915
                     additional_args={"headers": headers},
                 )
                 raise e
-        elif custom_llm_provider == "volcengine":
-                ## COMPLETION CALL
-                try:
-                    response = base_llm_http_handler.completion(
-                        model=model,
-                        messages=messages,
-                        headers=headers,
-                        model_response=model_response,
-                        api_key=api_key,
-                        api_base=api_base,
-                        acompletion=acompletion,
-                        logging_obj=logging,
-                        optional_params=optional_params,
-                        litellm_params=litellm_params,
-                        timeout=timeout,  # type: ignore
-                        client=client,
-                        custom_llm_provider=custom_llm_provider,
-                        encoding=encoding,
-                        stream=stream,
-                    )
-                except Exception as e:
-                    ## LOGGING - log the original exception returned
-                    logging.post_call(
-                        input=messages,
-                        api_key=api_key,
-                        original_response=str(e),
-                        additional_args={"headers": headers},
-                    )
-                    raise e
         elif (
             model in litellm.open_ai_chat_completion_models
             or custom_llm_provider == "custom_openai"
@@ -2913,6 +2884,7 @@ def completion(  # type: ignore # noqa: PLR0915
                 acompletion=acompletion,
                 model_response=model_response,
                 encoding=encoding,
+                client=client,
             )
             if acompletion is True or optional_params.get("stream", False) is True:
                 return generator
@@ -3985,7 +3957,6 @@ async def atext_completion(
             or custom_llm_provider == "ollama"
             or custom_llm_provider == "vertex_ai"
             or custom_llm_provider == "siliconflow"
-            or custom_llm_provider == "volcengine"
             or custom_llm_provider in litellm.openai_compatible_providers
         ):  # currently implemented aiohttp calls for just azure and openai, soon all.
             # Await normally
