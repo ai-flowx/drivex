@@ -1937,7 +1937,6 @@ class LlmProviders(str, Enum):
     NVIDIA_NIM = "nvidia_nim"
     CEREBRAS = "cerebras"
     AI21_CHAT = "ai21_chat"
-    VOLCENGINE = "volcengine"
     CODESTRAL = "codestral"
     TEXT_COMPLETION_CODESTRAL = "text-completion-codestral"
     DEEPSEEK = "deepseek"
@@ -1968,6 +1967,8 @@ class LlmProviders(str, Enum):
     TOPAZ = "topaz"
     ASSEMBLYAI = "assemblyai"
     SNOWFLAKE = "snowflake"
+    SILICONFLOW = "siliconflow"
+    VOLCENGINE = "volcengine"
 
 
 # Create a set of all provider values for quick lookup
