@@ -81,6 +81,7 @@ LITELLM_CHAT_PROVIDERS = [
     "galadriel",
     "siliconflow",
     "volcengine",
+    "aliyun",
 ]
 
 
@@ -143,6 +144,7 @@ openai_compatible_endpoints: List = [
     "api.galadriel.ai/v1",
     "api.siliconflow.cn/v1",
     "ark.cn-beijing.volces.com/api/v3",
+    "dashscope.aliyuncs.com/compatible-mode/v1",
 ]
 
 
@@ -173,6 +175,7 @@ openai_compatible_providers: List = [
     "galadriel",
     "siliconflow",
     "volcengine",
+    "aliyun",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`

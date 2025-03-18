@@ -23,3 +23,15 @@ curl --location 'http://localhost:4000/chat/completions' \
         }
     ]
 }'
+
+curl --location 'http://localhost:4000/chat/completions' \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "model": "aliyun-deepseek-r1-distill-llama-70b",
+    "messages": [
+        {
+            "role": "user",
+            "content": "what llm are you"
+        }
+    ]
+}'

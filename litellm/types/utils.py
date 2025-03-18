@@ -1969,6 +1969,7 @@ class LlmProviders(str, Enum):
     SNOWFLAKE = "snowflake"
     SILICONFLOW = "siliconflow"
     VOLCENGINE = "volcengine"
+    ALIYUN = "aliyun"
 
 
 # Create a set of all provider values for quick lookup
