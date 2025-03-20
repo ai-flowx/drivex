@@ -60,7 +60,6 @@ LITELLM_CHAT_PROVIDERS = [
     "nvidia_nim",
     "cerebras",
     "ai21_chat",
-    "volcengine",
     "codestral",
     "text-completion-codestral",
     "deepseek",
@@ -81,6 +80,9 @@ LITELLM_CHAT_PROVIDERS = [
     "hosted_vllm",
     "lm_studio",
     "galadriel",
+    "siliconflow",
+    "volcengine",
+    "aliyun",
 ]
 
 
@@ -141,6 +143,9 @@ openai_compatible_endpoints: List = [
     "api.sambanova.ai/v1",
     "api.x.ai/v1",
     "api.galadriel.ai/v1",
+    "api.siliconflow.cn/v1",
+    "ark.cn-beijing.volces.com/api/v3",
+    "dashscope.aliyuncs.com/compatible-mode/v1",
 ]
 
 
@@ -153,7 +158,6 @@ openai_compatible_providers: List = [
     "sambanova",
     "ai21_chat",
     "ai21",
-    "volcengine",
     "codestral",
     "deepseek",
     "deepinfra",
@@ -170,6 +174,9 @@ openai_compatible_providers: List = [
     "hosted_vllm",
     "lm_studio",
     "galadriel",
+    "siliconflow",
+    "volcengine",
+    "aliyun",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`
