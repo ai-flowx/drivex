@@ -2950,7 +2950,6 @@ def get_optional_params(  # noqa: PLR0915
             and custom_llm_provider != "cerebras"
             and custom_llm_provider != "xai"
             and custom_llm_provider != "ai21_chat"
-            and custom_llm_provider != "volcengine"
             and custom_llm_provider != "deepseek"
             and custom_llm_provider != "codestral"
             and custom_llm_provider != "mistral"
@@ -2960,6 +2959,9 @@ def get_optional_params(  # noqa: PLR0915
             and custom_llm_provider != "bedrock"
             and custom_llm_provider != "ollama_chat"
             and custom_llm_provider != "openrouter"
+            and custom_llm_provider != "siliconflow"
+            and custom_llm_provider != "volcengine"
+            and custom_llm_provider != "aliyun"
             and custom_llm_provider not in litellm.openai_compatible_providers
         ):
             if custom_llm_provider == "ollama":
@@ -3538,17 +3540,6 @@ def get_optional_params(  # noqa: PLR0915
                 else False
             ),
         )
-    elif custom_llm_provider == "volcengine":
-        optional_params = litellm.VolcEngineConfig().map_openai_params(
-            non_default_params=non_default_params,
-            optional_params=optional_params,
-            model=model,
-            drop_params=(
-                drop_params
-                if drop_params is not None and isinstance(drop_params, bool)
-                else False
-            ),
-        )
     elif custom_llm_provider == "hosted_vllm":
         optional_params = litellm.HostedVLLMChatConfig().map_openai_params(
             non_default_params=non_default_params,
@@ -3679,6 +3670,39 @@ def get_optional_params(  # noqa: PLR0915
                     else False
                 ),
             )
+    elif custom_llm_provider == "siliconflow":
+      optional_params = litellm.OpenAIConfig().map_openai_params(
+          non_default_params=non_default_params,
+          optional_params=optional_params,
+          model=model,
+          drop_params=(
+              drop_params
+              if drop_params is not None and isinstance(drop_params, bool)
+              else False
+          ),
+    )
+    elif custom_llm_provider == "volcengine":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
+    elif custom_llm_provider == "aliyun":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
     else:  # assume passing in params for openai-like api
         optional_params = litellm.OpenAILikeChatConfig().map_openai_params(
             non_default_params=non_default_params,
@@ -4990,11 +5014,6 @@ def validate_environment(  # noqa: PLR0915
                 keys_in_environment = True
             else:
                 missing_keys.append("AI21_API_KEY")
-        elif custom_llm_provider == "volcengine":
-            if "VOLCENGINE_API_KEY" in os.environ:
-                keys_in_environment = True
-            else:
-                missing_keys.append("VOLCENGINE_API_KEY")
         elif (
             custom_llm_provider == "codestral"
             or custom_llm_provider == "text-completion-codestral"
@@ -5047,6 +5066,21 @@ def validate_environment(  # noqa: PLR0915
             else:
                 missing_keys.append("CLOUDFLARE_API_KEY")
                 missing_keys.append("CLOUDFLARE_API_BASE")
+        elif custom_llm_provider == "siliconflow":
+                if "SILICONFLOW_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("SILICONFLOW_API_KEY")
+        elif custom_llm_provider == "volcengine":
+                if "VOLCENGINE_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("VOLCENGINE_API_KEY")
+        elif custom_llm_provider == "aliyun":
+                if "ALIYUN_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("ALIYUN_API_KEY")
     else:
         ## openai - chatcompletion + text completion
         if (
@@ -6233,8 +6267,6 @@ class ProviderConfigManager:
             return litellm.NvidiaNimConfig()
         elif litellm.LlmProviders.CEREBRAS == provider:
             return litellm.CerebrasConfig()
-        elif litellm.LlmProviders.VOLCENGINE == provider:
-            return litellm.VolcEngineConfig()
         elif litellm.LlmProviders.TEXT_COMPLETION_CODESTRAL == provider:
             return litellm.CodestralTextCompletionConfig()
         elif litellm.LlmProviders.SAMBANOVA == provider:
