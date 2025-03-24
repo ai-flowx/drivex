@@ -327,6 +327,24 @@ const PROVIDER_CREDENTIAL_FIELDS: Record<Providers, ProviderCredentialField[]> =
     label: "API Key",
     type: "password",
     required: true
+  }],
+  [Providers.SiliconFlow]: [{
+    key: "api_key",
+    label: "API Key",
+    type: "password",
+    required: true
+  }],
+  [Providers.Volcengine]: [{
+    key: "api_key",
+    label: "API Key",
+    type: "password",
+    required: true
+  }],
+  [Providers.Aliyun]: [{
+    key: "api_key",
+    label: "API Key",
+    type: "password",
+    required: true
   }]
 };
 
