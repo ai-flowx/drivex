@@ -588,14 +588,14 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
         api_base = (
                 api_base
                 or get_secret("VOLCENGINE_API_BASE")
-                or "ark.cn-beijing.volces.com/api/v3"
+                or "https://ark.cn-beijing.volces.com/api/v3"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("VOLCENGINE_API_KEY")
     elif custom_llm_provider == "aliyun":
         api_base = (
                 api_base
                 or get_secret("ALIYUN_API_BASE")
-                or "dashscope.aliyuncs.com/compatible-mode/v1"
+                or "https://dashscope.aliyuncs.com/compatible-mode/v1"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("ALIYUN_API_KEY")
 
