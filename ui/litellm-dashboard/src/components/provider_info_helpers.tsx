@@ -25,8 +25,10 @@ export enum Providers {
     Perplexity = "Perplexity",
     TogetherAI = "TogetherAI",
     Openrouter = "Openrouter",
-    FireworksAI = "Fireworks AI"
-
+    FireworksAI = "Fireworks AI",
+    SiliconFlow = "SiliconFlow",
+    Volcengine = "Volcengine",
+    Aliyun = "Aliyun"
   }
   
 export const provider_map: Record<string, string> = {
@@ -53,7 +55,10 @@ export const provider_map: Record<string, string> = {
     Perplexity: "perplexity",
     TogetherAI: "togetherai",
     Openrouter: "openrouter",
-    FireworksAI: "fireworks_ai"
+    FireworksAI: "fireworks_ai",
+    SiliconFlow: "siliconflow",
+    Volcengine: "volcengine",
+    Aliyun: "aliyun"
 };
 
 const asset_logos_folder = '/ui/assets/logos/';
@@ -82,7 +87,10 @@ export const providerLogoMap: Record<string, string> = {
     [Providers.Sambanova]: `${asset_logos_folder}sambanova.svg`,
     [Providers.TogetherAI]: `${asset_logos_folder}togetherai.svg`,
     [Providers.Vertex_AI]: `${asset_logos_folder}google.svg`,
-    [Providers.xAI]: `${asset_logos_folder}xai.svg`
+    [Providers.xAI]: `${asset_logos_folder}xai.svg`,
+    [Providers.SiliconFlow]: `${asset_logos_folder}openai_small.svg`,
+    [Providers.Volcengine]: `${asset_logos_folder}openai_small.svg`,
+    [Providers.Aliyun]: `${asset_logos_folder}openai_small.svg`
 };
 
 export const getProviderLogoAndName = (providerValue: string): { logo: string, displayName: string } => {
@@ -126,6 +134,12 @@ export const getPlaceholder = (selectedProvider: string): string => {
       return "azure_ai/command-r-plus";
     } else if (selectedProvider == Providers.Azure) {
       return "azure/my-deployment";
+    } else if (selectedProvider == Providers.SiliconFlow) {
+      return "siliconflow/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B";
+    } else if (selectedProvider == Providers.Volcengine) {
+      return "volcengine/deepseek-v3-241226";
+    } else if (selectedProvider == Providers.Aliyun) {
+      return "aliyun/deepseek-r1-distill-llama-70b";
     } else {
       return "gpt-3.5-turbo";
     }
