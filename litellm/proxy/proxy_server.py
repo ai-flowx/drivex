@@ -29,6 +29,7 @@ from litellm.types.utils import (
     ModelResponseStream,
     TextCompletionResponse,
 )
+from litellm.constants import DEFAULT_MAX_RECURSE_DEPTH
 
 if TYPE_CHECKING:
     from opentelemetry.trace import Span as _Span
@@ -462,6 +463,8 @@ async def proxy_startup_event(app: FastAPI):
     if premium_user is False:
         premium_user = _license_check.is_premium()
 
+    ## CHECK MASTER KEY IN ENVIRONMENT ##
+    master_key = get_secret_str("LITELLM_MASTER_KEY")
     ### LOAD CONFIG ###
     worker_config: Optional[Union[str, dict]] = get_secret("WORKER_CONFIG")  # type: ignore
     env_config_yaml: Optional[str] = get_secret_str("CONFIG_FILE_PATH")
@@ -1522,7 +1525,7 @@ class ProxyConfig:
                 yaml.dump(new_config, config_file, default_flow_style=False)
 
     def _check_for_os_environ_vars(
-        self, config: dict, depth: int = 0, max_depth: int = 10
+        self, config: dict, depth: int = 0, max_depth: int = DEFAULT_MAX_RECURSE_DEPTH
     ) -> dict:
         """
         Check for os.environ/ variables in the config and replace them with the actual values.
