@@ -483,6 +483,22 @@ def test_rerank_cohere_api():
     assert response.results[1]["document"]["text"] == "world"
 
 
+@pytest.mark.flaky(retries=3, delay=1)
+def test_rerank_siliconflow_api():
+    response = litellm.rerank(
+        model="siliconflow/BAAI/bge-reranker-v2-m3",
+        query="hello",
+        documents=["hello", "world"],
+        return_documents=True,
+        top_n=3,
+    )
+    print("rerank response", response)
+    assert response.results[0]["document"] is not None
+    assert response.results[0]["document"]["text"] is not None
+    assert response.results[0]["document"]["text"] == "hello"
+    assert response.results[1]["document"]["text"] == "world"
+
+
 def test_rerank_infer_region_from_model_arn(monkeypatch):
 
     mock_response = MagicMock()
