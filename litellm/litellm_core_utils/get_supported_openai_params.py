@@ -220,6 +220,8 @@ def get_supported_openai_params(  # noqa: PLR0915
                 )
             )
     elif custom_llm_provider == "siliconflow":
+        if request_type == "embeddings":
+            return litellm.SiliconFlowEmbeddingConfig().get_supported_openai_params()
         return litellm.SiliconFlowChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "volcengine":
         return litellm.VolcengineChatConfig().get_supported_openai_params(model=model)
