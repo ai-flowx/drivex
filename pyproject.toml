@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "litellm"
-version = "1.65.3"
+version = "1.65.4"
 description = "Library to easily interface with LLM API providers"
 authors = ["BerriAI"]
 license = "MIT"
@@ -101,7 +101,7 @@ mypy = "^1.0"
 pytest = "^7.4.3"
 pytest-mock = "^3.12.0"
 pytest-asyncio = "^0.21.1"
-respx = "^0.20.2"
+respx = "^0.22.0"
 ruff = "^0.1.0"
 types-requests = "*"
 types-setuptools = "*"
@@ -111,13 +111,14 @@ types-PyYAML = "*"
 [tool.poetry.group.proxy-dev.dependencies]
 prisma = "0.11.0"
 hypercorn = "^0.15.0"
+prometheus-client = "0.20.0"
 
 [build-system]
 requires = ["poetry-core", "wheel"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.commitizen]
-version = "1.65.3"
+version = "1.65.4"
 version_files = [
     "pyproject.toml:^version"
 ]

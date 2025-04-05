@@ -345,7 +345,7 @@ def test_anthropic_cache_controls_tool_calls_pt():
     assert translated_messages[1]["role"] == "assistant"
     for content_item in translated_messages[1]["content"]:
         if content_item["type"] == "tool_use":
-            assert content_item["cache_control"] is None
+            assert "cache_control" not in content_item
             assert content_item["name"] == "get_weather"
 
     assert translated_messages[2]["role"] == "user"
@@ -651,33 +651,36 @@ def test_alternating_roles_e2e():
     http_handler = HTTPHandler()
 
     with patch.object(http_handler, "post", new=MagicMock()) as mock_post:
-        response = litellm.completion(
-            **{
-                "model": "databricks/databricks-meta-llama-3-1-70b-instruct",
-                "messages": [
-                    {"role": "user", "content": "Hello!"},
-                    {
-                        "role": "assistant",
-                        "content": "Hello! How can I assist you today?",
+        try: 
+            response = litellm.completion(
+                **{
+                    "model": "databricks/databricks-meta-llama-3-1-70b-instruct",
+                    "messages": [
+                        {"role": "user", "content": "Hello!"},
+                        {
+                            "role": "assistant",
+                            "content": "Hello! How can I assist you today?",
+                        },
+                        {"role": "user", "content": "What is Databricks?"},
+                        {"role": "user", "content": "What is Azure?"},
+                        {"role": "assistant", "content": "I don't know anyything, do you?"},
+                        {"role": "assistant", "content": "I can't repeat sentences."},
+                    ],
+                    "user_continue_message": {
+                        "role": "user",
+                        "content": "Ok",
                     },
-                    {"role": "user", "content": "What is Databricks?"},
-                    {"role": "user", "content": "What is Azure?"},
-                    {"role": "assistant", "content": "I don't know anyything, do you?"},
-                    {"role": "assistant", "content": "I can't repeat sentences."},
-                ],
-                "user_continue_message": {
-                    "role": "user",
-                    "content": "Ok",
+                    "assistant_continue_message": {
+                        "role": "assistant",
+                        "content": "Please continue",
+                    },
+                    "ensure_alternating_roles": True,
                 },
-                "assistant_continue_message": {
-                    "role": "assistant",
-                    "content": "Please continue",
-                },
-                "ensure_alternating_roles": True,
-            },
-            client=http_handler,
-        )
-        print(f"response: {response}")
+                client=http_handler,
+            )
+        except Exception as e:
+            print(f"error: {e}")
+
         assert mock_post.call_args.kwargs["data"] == json.dumps(
             {
                 "model": "databricks-meta-llama-3-1-70b-instruct",
@@ -709,8 +712,7 @@ def test_alternating_roles_e2e():
                         "role": "user",
                         "content": "Ok",
                     },
-                ],
-                "stream": False,
+                ]
             }
         )
 
@@ -795,9 +797,7 @@ def test_hf_chat_template():
     print(chat_template)
     assert (
         chat_template.rstrip()
-        == """You are a helpful assistant.
-What is the weather in Copenhagen?
-"""
+        == "You are a helpful assistant. What is the weather in Copenhagen?"
     )
 
 

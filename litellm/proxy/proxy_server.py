@@ -249,6 +249,7 @@ from litellm.proxy.management_endpoints.ui_sso import (
 )
 from litellm.proxy.management_endpoints.ui_sso import router as ui_sso_router
 from litellm.proxy.management_helpers.audit_logs import create_audit_log_for_update
+from litellm.proxy.middleware.prometheus_auth_middleware import PrometheusAuthMiddleware
 from litellm.proxy.openai_files_endpoints.files_endpoints import (
     router as openai_files_router,
 )
@@ -745,6 +746,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(PrometheusAuthMiddleware)
 
 from typing import Dict
 
@@ -1676,14 +1678,11 @@ class ProxyConfig:
                                 callback
                             )
                             if "prometheus" in callback:
-                                verbose_proxy_logger.debug(
-                                    "Starting Prometheus Metrics on /metrics"
+                                from litellm.integrations.prometheus import (
+                                    PrometheusLogger,
                                 )
-                                from prometheus_client import make_asgi_app
 
-                                # Add prometheus asgi middleware to route /metrics requests
-                                metrics_app = make_asgi_app()
-                                app.mount("/metrics", metrics_app)
+                                PrometheusLogger._mount_metrics_endpoint(premium_user)
                     print(  # noqa
                         f"{blue_color_code} Initialized Success Callbacks - {litellm.success_callback} {reset_color_code}"
                     )  # noqa
@@ -5333,6 +5332,67 @@ async def _check_if_model_is_user_added(
     return filtered_models
 
 
+def _check_if_model_is_team_model(
+    models: List[DeploymentTypedDict], user_row: LiteLLM_UserTable
+) -> List[Dict]:
+    """
+    Check if model is a team model
+
+    Check if user is a member of the team that the model belongs to
+    """
+
+    user_team_models: List[Dict] = []
+    for model in models:
+        model_team_id = model.get("model_info", {}).get("team_id", None)
+
+        if model_team_id is not None:
+            if model_team_id in user_row.teams:
+                user_team_models.append(cast(Dict, model))
+
+    return user_team_models
+
+
+async def non_admin_all_models(
+    all_models: List[Dict],
+    llm_router: Router,
+    user_api_key_dict: UserAPIKeyAuth,
+    prisma_client: Optional[PrismaClient],
+):
+    """
+    Check if model is in db
+
+    Check if db model is 'created_by' == user_api_key_dict.user_id
+
+    Only return models that match
+    """
+    if prisma_client is None:
+        raise HTTPException(
+            status_code=500,
+            detail={"error": CommonProxyErrors.db_not_connected_error.value},
+        )
+
+    all_models = await _check_if_model_is_user_added(
+        models=all_models,
+        user_api_key_dict=user_api_key_dict,
+        prisma_client=prisma_client,
+    )
+
+    if user_api_key_dict.user_id:
+        try:
+            user_row = await prisma_client.db.litellm_usertable.find_unique(
+                where={"user_id": user_api_key_dict.user_id}
+            )
+        except Exception:
+            raise HTTPException(status_code=400, detail={"error": "User not found"})
+
+        all_models += _check_if_model_is_team_model(
+            models=llm_router.get_model_list() or [],
+            user_row=user_row,
+        )
+
+    return all_models
+
+
 @router.get(
     "/v2/model/info",
     description="v2 - returns models available to the user based on their API key permissions. Shows model info from config.yaml (except api key and api base). Filter to just user-added models with ?user_models_only=true",
@@ -5378,16 +5438,10 @@ async def model_info_v2(
     if model is not None:
         all_models = [m for m in all_models if m["model_name"] == model]
 
-    if user_models_only is True:
-        """
-        Check if model is in db
-
-        Check if db model is 'created_by' == user_api_key_dict.user_id
-
-        Only return models that match
-        """
-        all_models = await _check_if_model_is_user_added(
-            models=all_models,
+    if user_models_only:
+        all_models = await non_admin_all_models(
+            all_models=all_models,
+            llm_router=llm_router,
             user_api_key_dict=user_api_key_dict,
             prisma_client=prisma_client,
         )
