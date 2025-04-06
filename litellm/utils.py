@@ -2737,7 +2737,18 @@ def get_optional_params_embeddings(  # noqa: PLR0915
         )
         final_params = {**optional_params, **kwargs}
         return final_params
-
+    elif custom_llm_provider == "siliconflow":
+        supported_params = get_supported_openai_params(
+            model=model,
+            custom_llm_provider="siliconflow",
+            request_type="embeddings",
+        )
+        _check_valid_arg(supported_params=supported_params)
+        optional_params = litellm.SiliconFlowEmbeddingConfig().map_openai_params(
+            non_default_params=non_default_params, optional_params={}
+        )
+        final_params = {**optional_params, **kwargs}
+        return final_params
     elif (
         custom_llm_provider != "openai"
         and custom_llm_provider != "azure"
