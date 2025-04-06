@@ -1015,6 +1015,7 @@ from .llms.watsonx.completion.transformation import IBMWatsonXAIConfig
 from .llms.watsonx.chat.transformation import IBMWatsonXChatConfig
 from .llms.watsonx.embed.transformation import IBMWatsonXEmbeddingConfig
 from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
+from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
 from .llms.volcengine.chat.transformation import VolcengineChatConfig
 from .llms.aliyun.chat.transformation import AliyunChatConfig
 from .main import *  # type: ignore
