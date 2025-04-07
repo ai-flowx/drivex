@@ -150,6 +150,7 @@ LITELLM_CHAT_PROVIDERS = [
     "siliconflow",
     "volcengine",
     "aliyun",
+    "vercel",
 ]
 
 
@@ -213,6 +214,7 @@ openai_compatible_endpoints: List = [
     "api.siliconflow.cn/v1",
     "ark.cn-beijing.volces.com/api/v3",
     "dashscope.aliyuncs.com/compatible-mode/v1",
+    "openai-gemini-topaz.vercel.app/v1",
 ]
 
 
@@ -244,6 +246,7 @@ openai_compatible_providers: List = [
     "siliconflow",
     "volcengine",
     "aliyun",
+    "vercel",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`

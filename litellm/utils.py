@@ -3007,6 +3007,7 @@ def get_optional_params(  # noqa: PLR0915
             and custom_llm_provider != "siliconflow"
             and custom_llm_provider != "volcengine"
             and custom_llm_provider != "aliyun"
+            and custom_llm_provider != "vercel"
             and custom_llm_provider not in litellm.openai_compatible_providers
         ):
             if custom_llm_provider == "ollama":
@@ -3744,6 +3745,17 @@ def get_optional_params(  # noqa: PLR0915
             ),
         )
     elif custom_llm_provider == "aliyun":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
+    elif custom_llm_provider == "vercel":
         optional_params = litellm.OpenAIConfig().map_openai_params(
             non_default_params=non_default_params,
             optional_params=optional_params,
@@ -5153,6 +5165,11 @@ def validate_environment(  # noqa: PLR0915
                     keys_in_environment = True
                 else:
                     missing_keys.append("ALIYUN_API_KEY")
+        elif custom_llm_provider == "vercel":
+                if "VERCEL_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("VERCEL_API_KEY")
     else:
         ## openai - chatcompletion + text completion
         if (

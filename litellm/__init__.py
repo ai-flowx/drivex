@@ -418,6 +418,7 @@ snowflake_models: List = []
 siliconflow_models: List = []
 volcengine_models: List = []
 aliyun_models: List = []
+vercel_models: List = []
 
 
 def is_bedrock_pricing_only_model(key: str) -> bool:
@@ -579,6 +580,8 @@ def add_known_models():
             volcengine_models.append(key)
         elif value.get("litellm_provider") == "aliyun":
             aliyun_models.append(key)
+        elif value.get("litellm_provider") == "vercel":
+            vercel_models.append(key)
 
 
 add_known_models()
@@ -657,6 +660,7 @@ model_list = (
     + siliconflow_models
     + volcengine_models
     + aliyun_models
+    + vercel_models
 )
 
 model_list_set = set(model_list)
@@ -716,6 +720,7 @@ models_by_provider: dict = {
     "siliconflow": siliconflow_models,
     "volcengine": volcengine_models,
     "aliyun": aliyun_models,
+    "vercel": vercel_models,
 }
 
 # mapping for those models which have larger equivalents
@@ -1019,6 +1024,7 @@ from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfi
 from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
 from .llms.volcengine.chat.transformation import VolcengineChatConfig
 from .llms.aliyun.chat.transformation import AliyunChatConfig
+from .llms.vercel.chat.transformation import VercelChatConfig
 from .main import *  # type: ignore
 from .integrations import *
 from .exceptions import (

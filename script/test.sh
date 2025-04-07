@@ -51,3 +51,16 @@ curl --location 'http://localhost:4000/chat/completions' \
             }
         ]
     }'
+
+curl --location 'http://localhost:4000/chat/completions' \
+    --header 'Authorization: Bearer sk-y2gMsalbslZHYUp0Sl8DUQ' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "model": "vercel-gemini-2.5-pro-exp-03-25",
+        "messages": [
+            {
+                "role": "user",
+                "content": "what llm are you"
+            }
+        ]
+    }'

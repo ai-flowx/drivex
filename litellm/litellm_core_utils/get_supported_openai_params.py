@@ -227,6 +227,8 @@ def get_supported_openai_params(  # noqa: PLR0915
         return litellm.VolcengineChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "aliyun":
         return litellm.AliyunChatConfig().get_supported_openai_params(model=model)
+    elif custom_llm_provider == "vercel":
+        return litellm.VercelChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider in litellm._custom_providers:
         if request_type == "chat_completion":
             provider_config = litellm.ProviderConfigManager.get_provider_chat_config(
