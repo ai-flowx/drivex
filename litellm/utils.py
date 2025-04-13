@@ -6471,6 +6471,14 @@ class ProviderConfigManager:
             return litellm.LiteLLMProxyChatConfig()
         elif litellm.LlmProviders.OPENAI == provider:
             return litellm.OpenAIGPTConfig()
+        elif litellm.LlmProviders.ALIYUN == provider:
+            return litellm.AliyunChatConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowChatConfig()
+        elif litellm.LlmProviders.VERCEL == provider:
+            return litellm.VercelChatConfig()
+        elif litellm.LlmProviders.VOLCENGINE == provider:
+            return litellm.VolcengineChatConfig()
         return None
 
     @staticmethod
@@ -6484,6 +6492,8 @@ class ProviderConfigManager:
             return litellm.TritonEmbeddingConfig()
         elif litellm.LlmProviders.WATSONX == provider:
             return litellm.IBMWatsonXEmbeddingConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowEmbeddingConfig()
         raise ValueError(f"Provider {provider.value} does not support embedding config")
 
     @staticmethod
@@ -6572,6 +6582,14 @@ class ProviderConfigManager:
             return litellm.AnthropicModelInfo()
         elif LlmProviders.XAI == provider:
             return litellm.XAIModelInfo()
+        elif LlmProviders.ALIYUN == provider:
+            return litellm.AliyunChatConfig()
+        elif LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowChatConfig()
+        elif LlmProviders.VERCEL == provider:
+            return litellm.VercelChatConfig()
+        elif LlmProviders.VOLCENGINE == provider:
+            return litellm.VolcengineChatConfig()
 
         return None
 

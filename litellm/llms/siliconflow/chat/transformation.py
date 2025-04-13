@@ -38,17 +38,27 @@ class SiliconFlowChatConfig(OpenAIGPTConfig):
     def get_complete_url(
         self,
         api_base: Optional[str],
+        api_key: Optional[str],
         model: str,
         optional_params: dict,
+        litellm_params: dict,
         stream: Optional[bool] = None,
     ) -> str:
         """
-        If api_base is not provided, use the default SiliconFlow /chat/completions endpoint.
+        Get the complete URL for the API call.
+
+        Returns:
+            str: The complete URL for the API call.
         """
-        if not api_base:
+        if api_base is None:
             api_base = "https://api.siliconflow.cn/v1"
+        endpoint = "chat/completions"
 
-        if not api_base.endswith("/chat/completions"):
-            api_base = f"{api_base}/chat/completions"
+        # Remove trailing slash from api_base if present
+        api_base = api_base.rstrip("/")
 
-        return api_base
+        # Check if endpoint is already in the api_base
+        if endpoint in api_base:
+            return api_base
+
+        return f"{api_base}/{endpoint}"
