@@ -3029,8 +3029,11 @@ def get_optional_params(  # noqa: PLR0915
             and custom_llm_provider != "bedrock"
             and custom_llm_provider != "ollama_chat"
             and custom_llm_provider != "openrouter"
+            and custom_llm_provider != "ais"
             and custom_llm_provider != "aliyun"
+            and custom_llm_provider != "nebulacoder"
             and custom_llm_provider != "siliconflow"
+            and custom_llm_provider != "uniapi"
             and custom_llm_provider != "vercel"
             and custom_llm_provider != "volcengine"
             and custom_llm_provider not in litellm.openai_compatible_providers
@@ -3746,6 +3749,17 @@ def get_optional_params(  # noqa: PLR0915
                     else False
                 ),
             )
+    elif custom_llm_provider == "ais":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
     elif custom_llm_provider == "aliyun":
         optional_params = litellm.OpenAIConfig().map_openai_params(
             non_default_params=non_default_params,
@@ -3757,6 +3771,17 @@ def get_optional_params(  # noqa: PLR0915
                 else False
             ),
         )
+    elif custom_llm_provider == "nebulacoder":
+      optional_params = litellm.OpenAIConfig().map_openai_params(
+          non_default_params=non_default_params,
+          optional_params=optional_params,
+          model=model,
+          drop_params=(
+              drop_params
+              if drop_params is not None and isinstance(drop_params, bool)
+              else False
+          ),
+    )
     elif custom_llm_provider == "siliconflow":
       optional_params = litellm.OpenAIConfig().map_openai_params(
           non_default_params=non_default_params,
@@ -3768,6 +3793,17 @@ def get_optional_params(  # noqa: PLR0915
               else False
           ),
     )
+    elif custom_llm_provider == "uniapi":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
     elif custom_llm_provider == "vercel":
         optional_params = litellm.OpenAIConfig().map_openai_params(
             non_default_params=non_default_params,
@@ -5201,16 +5237,31 @@ def validate_environment(  # noqa: PLR0915
             else:
                 missing_keys.append("CLOUDFLARE_API_KEY")
                 missing_keys.append("CLOUDFLARE_API_BASE")
+        elif custom_llm_provider == "ais":
+                if "AIS_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("AIS_API_KEY")
         elif custom_llm_provider == "aliyun":
                 if "ALIYUN_API_KEY" in os.environ:
                     keys_in_environment = True
                 else:
                     missing_keys.append("ALIYUN_API_KEY")
+        elif custom_llm_provider == "nebulacoder":
+                if "NEBULACODER_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("NEBULACODER_API_KEY")
         elif custom_llm_provider == "siliconflow":
                 if "SILICONFLOW_API_KEY" in os.environ:
                     keys_in_environment = True
                 else:
                     missing_keys.append("SILICONFLOW_API_KEY")
+        elif custom_llm_provider == "uniapi":
+                if "UNIAPI_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("UNIAPI_API_KEY")
         elif custom_llm_provider == "vercel":
                 if "VERCEL_API_KEY" in os.environ:
                     keys_in_environment = True
@@ -6621,10 +6672,16 @@ class ProviderConfigManager:
             return litellm.LiteLLMProxyChatConfig()
         elif litellm.LlmProviders.OPENAI == provider:
             return litellm.OpenAIGPTConfig()
+        elif litellm.LlmProviders.AIS == provider:
+            return litellm.AISChatConfig()
         elif litellm.LlmProviders.ALIYUN == provider:
             return litellm.AliyunChatConfig()
+        elif litellm.LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderChatConfig()
         elif litellm.LlmProviders.SILICONFLOW == provider:
             return litellm.SiliconFlowChatConfig()
+        elif litellm.LlmProviders.UNIAPI == provider:
+            return litellm.UniAPIChatConfig()
         elif litellm.LlmProviders.VERCEL == provider:
             return litellm.VercelChatConfig()
         elif litellm.LlmProviders.VOLCENGINE == provider:
@@ -6742,10 +6799,16 @@ class ProviderConfigManager:
             )
 
             return VLLMModelInfo()
+        elif LlmProviders.AIS == provider:
+            return litellm.AISChatConfig()
         elif LlmProviders.ALIYUN == provider:
             return litellm.AliyunChatConfig()
+        elif LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderChatConfig()
         elif LlmProviders.SILICONFLOW == provider:
             return litellm.SiliconFlowChatConfig()
+        elif LlmProviders.UNIAPI == provider:
+            return litellm.UniAPIChatConfig()
         elif LlmProviders.VERCEL == provider:
             return litellm.VercelChatConfig()
         elif LlmProviders.VOLCENGINE == provider:

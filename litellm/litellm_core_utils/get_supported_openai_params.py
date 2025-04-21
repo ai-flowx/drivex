@@ -235,12 +235,18 @@ def get_supported_openai_params(  # noqa: PLR0915
                     model=model
                 )
             )
+    elif custom_llm_provider == "ais":
+        return litellm.AISChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "aliyun":
         return litellm.AliyunChatConfig().get_supported_openai_params(model=model)
+    elif custom_llm_provider == "nebulacoder":
+        return litellm.NebulaCoderChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "siliconflow":
         if request_type == "embeddings":
             return litellm.SiliconFlowEmbeddingConfig().get_supported_openai_params()
         return litellm.SiliconFlowChatConfig().get_supported_openai_params(model=model)
+    elif custom_llm_provider == "uniapi":
+        return litellm.UniAPIChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "vercel":
         return litellm.VercelChatConfig().get_supported_openai_params(model=model)
     elif custom_llm_provider == "volcengine":
