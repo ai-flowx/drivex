@@ -431,8 +431,11 @@ galadriel_models: List = []
 sambanova_models: List = []
 assemblyai_models: List = []
 snowflake_models: List = []
+ais_models: List = []
 aliyun_models: List = []
+nebulacoder_models: List = []
 siliconflow_models: List = []
+uniapi_models: List = []
 vercel_models: List = []
 volcengine_models: List = []
 
@@ -592,10 +595,16 @@ def add_known_models():
             jina_ai_models.append(key)
         elif value.get("litellm_provider") == "snowflake":
             snowflake_models.append(key)
+        elif value.get("litellm_provider") == "ais":
+            ais_models.append(key)
         elif value.get("litellm_provider") == "aliyun":
             aliyun_models.append(key)
+        elif value.get("litellm_provider") == "nebulacoder":
+            nebulacoder_models.append(key)
         elif value.get("litellm_provider") == "siliconflow":
             siliconflow_models.append(key)
+        elif value.get("litellm_provider") == "uniapi":
+            uniapi_models.append(key)
         elif value.get("litellm_provider") == "vercel":
             vercel_models.append(key)
         elif value.get("litellm_provider") == "volcengine":
@@ -676,8 +685,11 @@ model_list = (
     + assemblyai_models
     + jina_ai_models
     + snowflake_models
+    + ais_models
     + aliyun_models
+    + nebulacoder_models
     + siliconflow_models
+    + uniapi_models
     + vercel_models
     + volcengine_models
 )
@@ -737,8 +749,11 @@ models_by_provider: dict = {
     "assemblyai": assemblyai_models,
     "jina_ai": jina_ai_models,
     "snowflake": snowflake_models,
+    "ais": ais_models,
     "aliyun": aliyun_models,
+    "nebulacoder": nebulacoder_models,
     "siliconflow": siliconflow_models,
+    "uniapi": uniapi_models,
     "vercel": vercel_models,
     "volcengine": volcengine_models,
 }
@@ -1042,10 +1057,13 @@ from .llms.azure.chat.o_series_transformation import AzureOpenAIO1Config
 from .llms.watsonx.completion.transformation import IBMWatsonXAIConfig
 from .llms.watsonx.chat.transformation import IBMWatsonXChatConfig
 from .llms.watsonx.embed.transformation import IBMWatsonXEmbeddingConfig
+from .llms.ais.chat.transformation import AISChatConfig
 from .llms.aliyun.chat.transformation import AliyunChatConfig
+from .llms.nebulacoder.chat.transformation import NebulaCoderChatConfig
 from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
 from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfig
 from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
+from .llms.uniapi.chat.transformation import UniAPIChatConfig
 from .llms.vercel.chat.transformation import VercelChatConfig
 from .llms.volcengine.chat.transformation import VolcengineChatConfig
 from .main import *  # type: ignore

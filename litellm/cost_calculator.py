@@ -64,11 +64,20 @@ from litellm.types.llms.openai import (
     ResponseAPIUsage,
     ResponsesAPIResponse,
 )
+from litellm.llms.ais.cost_calculator import (
+    cost_per_token as ais_cost_per_token,
+)
 from litellm.llms.aliyun.cost_calculator import (
     cost_per_token as aliyun_cost_per_token,
 )
+from litellm.llms.nebulacoder.cost_calculator import (
+    cost_per_token as nebulacoder_cost_per_token,
+)
 from litellm.llms.siliconflow.cost_calculator import (
     cost_per_token as siliconflow_cost_per_token,
+)
+from litellm.llms.uniapi.cost_calculator import (
+    cost_per_token as uniapi_cost_per_token,
 )
 from litellm.llms.vercel.cost_calculator import (
     cost_per_token as vercel_cost_per_token,
@@ -323,10 +332,16 @@ def cost_per_token(  # noqa: PLR0915
         return gemini_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "deepseek":
         return deepseek_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "ais":
+        return ais_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "aliyun":
         return aliyun_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "nebulacoder":
+        return nebulacoder_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "siliconflow":
         return siliconflow_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "uniapi":
+        return uniapi_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "vercel":
         return vercel_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "volcengine":
