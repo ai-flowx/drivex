@@ -216,12 +216,21 @@ def get_llm_provider(  # noqa: PLR0915
                     elif endpoint == "api.galadriel.com/v1":
                         custom_llm_provider = "galadriel"
                         dynamic_api_key = get_secret_str("GALADRIEL_API_KEY")
+                    elif endpoint == "api.ais.ai/v1":
+                        custom_llm_provider = "ais"
+                        dynamic_api_key = get_secret_str("AIS_API_KEY")
                     elif endpoint == "dashscope.aliyuncs.com/compatible-mode/v1":
                         custom_llm_provider = "aliyun"
                         dynamic_api_key = get_secret_str("ALIYUN_API_KEY")
+                    elif endpoint == "api.nebulacoder.ai/v1":
+                        custom_llm_provider = "nebulacoder"
+                        dynamic_api_key = get_secret_str("NEBULACODER_API_KEY")
                     elif endpoint == "api.siliconflow.cn/v1":
                         custom_llm_provider = "siliconflow"
                         dynamic_api_key = get_secret_str("SILICONFLOW_API_KEY")
+                    elif endpoint == "api.uniapi.io/v1":
+                        custom_llm_provider = "uniapi"
+                        dynamic_api_key = get_secret_str("UNIAPI_API_KEY")
                     elif endpoint == "openai-gemini-topaz.vercel.app/v1":
                         custom_llm_provider = "vercel"
                         dynamic_api_key = get_secret_str("VERCEL_API_KEY")
@@ -584,6 +593,13 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
             or f"https://{get_secret('SNOWFLAKE_ACCOUNT_ID')}.snowflakecomputing.com/api/v2/cortex/inference:complete"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("SNOWFLAKE_JWT")
+    elif custom_llm_provider == "ais":
+        api_base = (
+                api_base
+                or get_secret("AIS_API_BASE")
+                or "https://api.ais.ai/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("AIS_API_KEY")
     elif custom_llm_provider == "aliyun":
         api_base = (
                 api_base
@@ -591,6 +607,13 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
                 or "https://dashscope.aliyuncs.com/compatible-mode/v1"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("ALIYUN_API_KEY")
+    elif custom_llm_provider == "nebulacoder":
+        api_base = (
+                api_base
+                or get_secret("NEBULACODER_API_BASE")
+                or "https://api.nebulacoder.ai/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("NEBULACODER_API_KEY")
     elif custom_llm_provider == "siliconflow":
         api_base = (
                 api_base
@@ -598,6 +621,13 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
                 or "https://api.siliconflow.cn/v1"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("SILICONFLOW_API_KEY")
+    elif custom_llm_provider == "uniapi":
+        api_base = (
+                api_base
+                or get_secret("UNIAPI_API_BASE")
+                or "https://api.uniapi.io/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("UNIAPI_API_KEY")
     elif custom_llm_provider == "vercel":
         api_base = (
                 api_base

@@ -2101,8 +2101,11 @@ class LlmProviders(str, Enum):
     TOPAZ = "topaz"
     ASSEMBLYAI = "assemblyai"
     SNOWFLAKE = "snowflake"
+    AIS = "ais"
     ALIYUN = "aliyun"
+    NEBULACODER = "nebulacoder"
     SILICONFLOW = "siliconflow"
+    UNIAPI = "uniapi"
     VERCEL = "vercel"
     VOLCENGINE = "volcengine"
 
