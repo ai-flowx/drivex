@@ -6,6 +6,7 @@ from typing import List, Optional, Tuple
 
 from litellm.litellm_core_utils.prompt_templates.common_utils import (
     handle_messages_with_content_list_to_str_conversion,
+    strip_none_values_from_message,
 )
 from litellm.secret_managers.main import get_secret_str
 from litellm.types.llms.openai import AllMessageValues
@@ -18,11 +19,14 @@ class AISChatConfig(OpenAIGPTConfig):
     def _transform_messages(
         self, messages: List[AllMessageValues], model: str
     ) -> List[AllMessageValues]:
-        """
-        AIS does not support content in list format.
-        """
         messages = handle_messages_with_content_list_to_str_conversion(messages)
-        return super()._transform_messages(messages=messages, model=model)
+
+        new_messages: List[AllMessageValues] = []
+        for m in messages:
+            m = strip_none_values_from_message(m)  # prevents 'extra_forbidden' error
+            new_messages.append(m)
+
+        return new_messages
 
     def _get_openai_compatible_provider_info(
         self, api_base: Optional[str], api_key: Optional[str]
