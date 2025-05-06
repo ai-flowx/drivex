@@ -2488,7 +2488,18 @@ def get_optional_params_embeddings(  # noqa: PLR0915
         )
         final_params = {**optional_params, **kwargs}
         return final_params
-
+    elif custom_llm_provider == "siliconflow":
+        supported_params = get_supported_openai_params(
+            model=model,
+            custom_llm_provider="siliconflow",
+            request_type="embeddings",
+        )
+        _check_valid_arg(supported_params=supported_params)
+        optional_params = litellm.SiliconFlowEmbeddingConfig().map_openai_params(
+            non_default_params=non_default_params, optional_params={}
+        )
+        final_params = {**optional_params, **kwargs}
+        return final_params
     elif (
         custom_llm_provider != "openai"
         and custom_llm_provider != "azure"
@@ -2735,7 +2746,6 @@ def get_optional_params(  # noqa: PLR0915
             and custom_llm_provider != "cerebras"
             and custom_llm_provider != "xai"
             and custom_llm_provider != "ai21_chat"
-            and custom_llm_provider != "volcengine"
             and custom_llm_provider != "deepseek"
             and custom_llm_provider != "codestral"
             and custom_llm_provider != "mistral"
@@ -2745,6 +2755,13 @@ def get_optional_params(  # noqa: PLR0915
             and custom_llm_provider != "bedrock"
             and custom_llm_provider != "ollama_chat"
             and custom_llm_provider != "openrouter"
+            and custom_llm_provider != "ais"
+            and custom_llm_provider != "aliyun"
+            and custom_llm_provider != "nebulacoder"
+            and custom_llm_provider != "siliconflow"
+            and custom_llm_provider != "uniapi"
+            and custom_llm_provider != "vercel"
+            and custom_llm_provider != "volcengine"
             and custom_llm_provider not in litellm.openai_compatible_providers
         ):
             if custom_llm_provider == "ollama":
@@ -3328,17 +3345,6 @@ def get_optional_params(  # noqa: PLR0915
                 else False
             ),
         )
-    elif custom_llm_provider == "volcengine":
-        optional_params = litellm.VolcEngineConfig().map_openai_params(
-            non_default_params=non_default_params,
-            optional_params=optional_params,
-            model=model,
-            drop_params=(
-                drop_params
-                if drop_params is not None and isinstance(drop_params, bool)
-                else False
-            ),
-        )
     elif custom_llm_provider == "hosted_vllm":
         optional_params = litellm.HostedVLLMChatConfig().map_openai_params(
             non_default_params=non_default_params,
@@ -3469,6 +3475,83 @@ def get_optional_params(  # noqa: PLR0915
                     else False
                 ),
             )
+    elif custom_llm_provider == "ais":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
+    elif custom_llm_provider == "aliyun":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
+    elif custom_llm_provider == "nebulacoder":
+      optional_params = litellm.OpenAIConfig().map_openai_params(
+          non_default_params=non_default_params,
+          optional_params=optional_params,
+          model=model,
+          drop_params=(
+              drop_params
+              if drop_params is not None and isinstance(drop_params, bool)
+              else False
+          ),
+    )
+    elif custom_llm_provider == "siliconflow":
+      optional_params = litellm.OpenAIConfig().map_openai_params(
+          non_default_params=non_default_params,
+          optional_params=optional_params,
+          model=model,
+          drop_params=(
+              drop_params
+              if drop_params is not None and isinstance(drop_params, bool)
+              else False
+          ),
+    )
+    elif custom_llm_provider == "uniapi":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
+    elif custom_llm_provider == "vercel":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
+    elif custom_llm_provider == "volcengine":
+        optional_params = litellm.OpenAIConfig().map_openai_params(
+            non_default_params=non_default_params,
+            optional_params=optional_params,
+            model=model,
+            drop_params=(
+                drop_params
+                if drop_params is not None and isinstance(drop_params, bool)
+                else False
+            ),
+        )
     elif provider_config is not None:
         optional_params = provider_config.map_openai_params(
             non_default_params=non_default_params,
@@ -4823,11 +4906,6 @@ def validate_environment(  # noqa: PLR0915
                 keys_in_environment = True
             else:
                 missing_keys.append("AI21_API_KEY")
-        elif custom_llm_provider == "volcengine":
-            if "VOLCENGINE_API_KEY" in os.environ:
-                keys_in_environment = True
-            else:
-                missing_keys.append("VOLCENGINE_API_KEY")
         elif (
             custom_llm_provider == "codestral"
             or custom_llm_provider == "text-completion-codestral"
@@ -4885,6 +4963,41 @@ def validate_environment(  # noqa: PLR0915
             else:
                 missing_keys.append("CLOUDFLARE_API_KEY")
                 missing_keys.append("CLOUDFLARE_API_BASE")
+        elif custom_llm_provider == "ais":
+                if "AIS_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("AIS_API_KEY")
+        elif custom_llm_provider == "aliyun":
+                if "ALIYUN_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("ALIYUN_API_KEY")
+        elif custom_llm_provider == "nebulacoder":
+                if "NEBULACODER_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("NEBULACODER_API_KEY")
+        elif custom_llm_provider == "siliconflow":
+                if "SILICONFLOW_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("SILICONFLOW_API_KEY")
+        elif custom_llm_provider == "uniapi":
+                if "UNIAPI_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("UNIAPI_API_KEY")
+        elif custom_llm_provider == "vercel":
+                if "VERCEL_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("VERCEL_API_KEY")
+        elif custom_llm_provider == "volcengine":
+                if "VOLCENGINE_API_KEY" in os.environ:
+                    keys_in_environment = True
+                else:
+                    missing_keys.append("VOLCENGINE_API_KEY")
     else:
         ## openai - chatcompletion + text completion
         if (
@@ -6286,8 +6399,6 @@ class ProviderConfigManager:
             return litellm.NvidiaNimConfig()
         elif litellm.LlmProviders.CEREBRAS == provider:
             return litellm.CerebrasConfig()
-        elif litellm.LlmProviders.VOLCENGINE == provider:
-            return litellm.VolcEngineConfig()
         elif litellm.LlmProviders.TEXT_COMPLETION_CODESTRAL == provider:
             return litellm.CodestralTextCompletionConfig()
         elif litellm.LlmProviders.SAMBANOVA == provider:
@@ -6344,6 +6455,20 @@ class ProviderConfigManager:
             return litellm.LiteLLMProxyChatConfig()
         elif litellm.LlmProviders.OPENAI == provider:
             return litellm.OpenAIGPTConfig()
+        elif litellm.LlmProviders.AIS == provider:
+            return litellm.AISChatConfig()
+        elif litellm.LlmProviders.ALIYUN == provider:
+            return litellm.AliyunChatConfig()
+        elif litellm.LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderChatConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowChatConfig()
+        elif litellm.LlmProviders.UNIAPI == provider:
+            return litellm.UniAPIChatConfig()
+        elif litellm.LlmProviders.VERCEL == provider:
+            return litellm.VercelChatConfig()
+        elif litellm.LlmProviders.VOLCENGINE == provider:
+            return litellm.VolcengineChatConfig()
         return None
 
     @staticmethod
@@ -6359,6 +6484,8 @@ class ProviderConfigManager:
             return litellm.IBMWatsonXEmbeddingConfig()
         elif litellm.LlmProviders.INFINITY == provider:
             return litellm.InfinityEmbeddingConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowEmbeddingConfig()
         raise ValueError(f"Provider {provider.value} does not support embedding config")
 
     @staticmethod
@@ -6379,6 +6506,8 @@ class ProviderConfigManager:
             return litellm.InfinityRerankConfig()
         elif litellm.LlmProviders.JINA_AI == provider:
             return litellm.JinaAIRerankConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowRerankConfig()
         return litellm.CohereRerankConfig()
 
     @staticmethod
@@ -6453,6 +6582,21 @@ class ProviderConfigManager:
             )
 
             return VLLMModelInfo()
+        elif LlmProviders.AIS == provider:
+            return litellm.AISChatConfig()
+        elif LlmProviders.ALIYUN == provider:
+            return litellm.AliyunChatConfig()
+        elif LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderChatConfig()
+        elif LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowChatConfig()
+        elif LlmProviders.UNIAPI == provider:
+            return litellm.UniAPIChatConfig()
+        elif LlmProviders.VERCEL == provider:
+            return litellm.VercelChatConfig()
+        elif LlmProviders.VOLCENGINE == provider:
+            return litellm.VolcengineChatConfig()
+
         return None
 
     @staticmethod

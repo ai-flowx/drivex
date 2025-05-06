@@ -218,6 +218,27 @@ def get_llm_provider(  # noqa: PLR0915
                     elif endpoint == "https://api.llama.com/compat/v1":
                         custom_llm_provider = "meta_llama"
                         dynamic_api_key = api_key or get_secret_str("LLAMA_API_KEY")
+                    elif endpoint == "api.ais.ai/v1":
+                        custom_llm_provider = "ais"
+                        dynamic_api_key = get_secret_str("AIS_API_KEY")
+                    elif endpoint == "dashscope.aliyuncs.com/compatible-mode/v1":
+                        custom_llm_provider = "aliyun"
+                        dynamic_api_key = get_secret_str("ALIYUN_API_KEY")
+                    elif endpoint == "api.nebulacoder.ai/v1":
+                        custom_llm_provider = "nebulacoder"
+                        dynamic_api_key = get_secret_str("NEBULACODER_API_KEY")
+                    elif endpoint == "api.siliconflow.cn/v1":
+                        custom_llm_provider = "siliconflow"
+                        dynamic_api_key = get_secret_str("SILICONFLOW_API_KEY")
+                    elif endpoint == "api.uniapi.io/v1":
+                        custom_llm_provider = "uniapi"
+                        dynamic_api_key = get_secret_str("UNIAPI_API_KEY")
+                    elif endpoint == "openai-gemini-topaz.vercel.app/v1":
+                        custom_llm_provider = "vercel"
+                        dynamic_api_key = get_secret_str("VERCEL_API_KEY")
+                    elif endpoint == "ark.cn-beijing.volces.com/api/v3":
+                        custom_llm_provider = "volcengine"
+                        dynamic_api_key = get_secret_str("VOLCENGINE_API_KEY")
 
                     if api_base is not None and not isinstance(api_base, str):
                         raise Exception(
@@ -462,14 +483,6 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("AI21_API_KEY")
         custom_llm_provider = "ai21_chat"
-    elif custom_llm_provider == "volcengine":
-        # volcengine is openai compatible, we just need to set this to custom_openai and have the api_base be https://api.endpoints.anyscale.com/v1
-        api_base = (
-            api_base
-            or get_secret("VOLCENGINE_API_BASE")
-            or "https://ark.cn-beijing.volces.com/api/v3"
-        )  # type: ignore
-        dynamic_api_key = api_key or get_secret_str("VOLCENGINE_API_KEY")
     elif custom_llm_provider == "codestral":
         # codestral is openai compatible, we just need to set this to custom_openai and have the api_base be https://codestral.mistral.ai/v1
         api_base = (
@@ -597,6 +610,55 @@ def _get_openai_compatible_provider_info(  # noqa: PLR0915
             or f"https://{get_secret('SNOWFLAKE_ACCOUNT_ID')}.snowflakecomputing.com/api/v2/cortex/inference:complete"
         )  # type: ignore
         dynamic_api_key = api_key or get_secret_str("SNOWFLAKE_JWT")
+    elif custom_llm_provider == "ais":
+        api_base = (
+                api_base
+                or get_secret("AIS_API_BASE")
+                or "https://api.ais.ai/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("AIS_API_KEY")
+    elif custom_llm_provider == "aliyun":
+        api_base = (
+                api_base
+                or get_secret("ALIYUN_API_BASE")
+                or "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("ALIYUN_API_KEY")
+    elif custom_llm_provider == "nebulacoder":
+        api_base = (
+                api_base
+                or get_secret("NEBULACODER_API_BASE")
+                or "https://api.nebulacoder.ai/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("NEBULACODER_API_KEY")
+    elif custom_llm_provider == "siliconflow":
+        api_base = (
+                api_base
+                or get_secret("SILICONFLOW_API_BASE")
+                or "https://api.siliconflow.cn/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("SILICONFLOW_API_KEY")
+    elif custom_llm_provider == "uniapi":
+        api_base = (
+                api_base
+                or get_secret("UNIAPI_API_BASE")
+                or "https://api.uniapi.io/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("UNIAPI_API_KEY")
+    elif custom_llm_provider == "vercel":
+        api_base = (
+                api_base
+                or get_secret("VERCEL_API_BASE")
+                or "https://openai-gemini-topaz.vercel.app/v1"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("VERCEL_API_KEY")
+    elif custom_llm_provider == "volcengine":
+        api_base = (
+                api_base
+                or get_secret("VOLCENGINE_API_BASE")
+                or "https://ark.cn-beijing.volces.com/api/v3"
+        )  # type: ignore
+        dynamic_api_key = api_key or get_secret_str("VOLCENGINE_API_KEY")
 
     if api_base is not None and not isinstance(api_base, str):
         raise Exception("api base needs to be a string. api_base={}".format(api_base))
