@@ -224,6 +224,10 @@ LITELLM_CHAT_PROVIDERS = [
     "novita",
     "meta_llama",
     "nscale",
+    "ais",
+    "aliyun",
+    "nebulacoder",
+    "siliconflow",
 ]
 
 LITELLM_EMBEDDING_PROVIDERS_SUPPORTING_INPUT_ARRAY_OF_TOKENS = [
@@ -293,6 +297,10 @@ openai_compatible_endpoints: List = [
     "api.galadriel.ai/v1",
     "api.llama.com/compat/v1/",
     "inference.api.nscale.com/v1",
+    "api.ais.ai/v1",
+    "dashscope.aliyuncs.com/compatible-mode/v1",
+    "api.nebulacoder.ai/v1",
+    "api.siliconflow.cn/v1",
 ]
 
 
@@ -326,6 +334,10 @@ openai_compatible_providers: List = [
     "novita",
     "meta_llama",
     "nscale",
+    "ais",
+    "aliyun",
+    "nebulacoder",
+    "siliconflow",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`

@@ -323,6 +323,33 @@ def rerank(  # noqa: PLR0915
                 logging_obj=litellm_logging_obj,
                 client=client,
             )
+        elif _custom_llm_provider == "siliconflow":
+            if dynamic_api_key is None:
+                raise ValueError(
+                    "SiliconFlow API key is required, please set 'SILICONFLOW_API_KEY' in your environment"
+                )
+
+            api_base = (
+                dynamic_api_base
+                or optional_params.api_base
+                or litellm.api_base
+                or get_secret("SILICONFLOW_API_BASE")  # type: ignore
+            )
+
+            response = base_llm_http_handler.rerank(
+                model=model,
+                custom_llm_provider=_custom_llm_provider,
+                optional_rerank_params=optional_rerank_params,
+                logging_obj=litellm_logging_obj,
+                provider_config=rerank_provider_config,
+                timeout=optional_params.timeout,
+                api_key=dynamic_api_key or optional_params.api_key,
+                api_base=api_base,
+                _is_async=_is_async,
+                headers=headers or litellm.headers or {},
+                client=client,
+                model_response=model_response,
+            )
         else:
             raise ValueError(f"Unsupported provider: {_custom_llm_provider}")
 
