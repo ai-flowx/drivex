@@ -2237,6 +2237,10 @@ class LlmProviders(str, Enum):
     SNOWFLAKE = "snowflake"
     LLAMA = "meta_llama"
     NSCALE = "nscale"
+    AIS = "ais"
+    ALIYUN = "aliyun"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 # Create a set of all provider values for quick lookup
