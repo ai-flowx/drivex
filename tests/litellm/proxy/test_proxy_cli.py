@@ -150,7 +150,7 @@ class TestProxyInitializationHelpers:
     def test_get_loop_type(self):
         # Test on Windows
         with patch("sys.platform", "win32"):
-            assert ProxyInitializationHelpers._get_loop_type() is None
+            assert ProxyInitializationHelpers._get_loop_type() is "winloop"
 
         # Test on Linux
         with patch("sys.platform", "linux"):
