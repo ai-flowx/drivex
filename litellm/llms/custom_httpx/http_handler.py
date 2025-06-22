@@ -527,6 +527,8 @@ class AsyncHTTPHandler:
         ):
             return False
 
+        from litellm.secret_managers.main import str_to_bool
+
         #########################################################
         # Default: Use AiohttpTransport
         ########################################################
@@ -585,9 +587,19 @@ class AsyncHTTPHandler:
             ssl_verify=ssl_verify, ssl_context=ssl_context
         )
 
+        #########################################################
+        # Check if user disabled aiohttp trust env
+        # When True, aiohttp will not trust environment variables for proxy settings
+        ########################################################
+        disable_trust_env = (
+            litellm.disable_aiohttp_trust_env is True
+            or str_to_bool(os.getenv("DISABLE_AIOHTTP_TRUST_ENV", "False")) is True
+        )
+
         verbose_logger.debug("Creating AiohttpTransport...")
         return LiteLLMAiohttpTransport(
             client=lambda: ClientSession(
+                trust_env=not disable_trust_env,
                 connector=TCPConnector(**connector_kwargs)
             ),
         )
