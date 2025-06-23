@@ -527,8 +527,6 @@ class AsyncHTTPHandler:
         ):
             return False
 
-        from litellm.secret_managers.main import str_to_bool
-
         #########################################################
         # Default: Use AiohttpTransport
         ########################################################
@@ -582,10 +580,7 @@ class AsyncHTTPHandler:
         - True: use default SSL verification (equivalent to ssl.create_default_context())
         """
         from litellm.llms.custom_httpx.aiohttp_transport import LiteLLMAiohttpTransport
-
-        connector_kwargs = AsyncHTTPHandler._get_ssl_connector_kwargs(
-            ssl_verify=ssl_verify, ssl_context=ssl_context
-        )
+        from litellm.secret_managers.main import str_to_bool
 
         #########################################################
         # Check if user disabled aiohttp trust env
@@ -594,6 +589,10 @@ class AsyncHTTPHandler:
         disable_trust_env = (
             litellm.disable_aiohttp_trust_env is True
             or str_to_bool(os.getenv("DISABLE_AIOHTTP_TRUST_ENV", "False")) is True
+        )
+
+        connector_kwargs = AsyncHTTPHandler._get_ssl_connector_kwargs(
+            ssl_verify=ssl_verify, ssl_context=ssl_context
         )
 
         verbose_logger.debug("Creating AiohttpTransport...")
