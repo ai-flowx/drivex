@@ -482,6 +482,10 @@ nebius_models: List = []
 nebius_embedding_models: List = []
 deepgram_models: List = []
 elevenlabs_models: List = []
+ais_models: List = []
+aliyun_models: List = []
+nebulacoder_models: List = []
+siliconflow_models: List = []
 
 
 def is_bedrock_pricing_only_model(key: str) -> bool:
@@ -657,6 +661,14 @@ def add_known_models():
             deepgram_models.append(key)
         elif value.get("litellm_provider") == "elevenlabs":
             elevenlabs_models.append(key)
+        elif value.get("litellm_provider") == "ais":
+            ais_models.append(key)
+        elif value.get("litellm_provider") == "aliyun":
+            aliyun_models.append(key)
+        elif value.get("litellm_provider") == "nebulacoder":
+            nebulacoder_models.append(key)
+        elif value.get("litellm_provider") == "siliconflow":
+            siliconflow_models.append(key)
 
 
 add_known_models()
@@ -740,6 +752,10 @@ model_list = (
     + nscale_models
     + deepgram_models
     + elevenlabs_models
+    + ais_models
+    + aliyun_models
+    + nebulacoder_models
+    + siliconflow_models
 )
 
 model_list_set = set(model_list)
@@ -805,6 +821,10 @@ models_by_provider: dict = {
     "featherless_ai": featherless_ai_models,
     "deepgram": deepgram_models,
     "elevenlabs": elevenlabs_models,
+    "ais": ais_models,
+    "aliyun": aliyun_models,
+    "nebulacoder": nebulacoder_models,
+    "siliconflow": siliconflow_models,
 }
 
 # mapping for those models which have larger equivalents
@@ -1121,6 +1141,12 @@ from .llms.watsonx.chat.transformation import IBMWatsonXChatConfig
 from .llms.watsonx.embed.transformation import IBMWatsonXEmbeddingConfig
 from .llms.github_copilot.chat.transformation import GithubCopilotConfig
 from .llms.nebius.chat.transformation import NebiusConfig
+from .llms.ais.chat.transformation import AISChatConfig
+from .llms.aliyun.chat.transformation import AliyunChatConfig
+from .llms.nebulacoder.chat.transformation import NebulaCoderChatConfig
+from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
+from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfig
+from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
 from .main import *  # type: ignore
 from .integrations import *
 from .exceptions import (
