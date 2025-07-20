@@ -2313,6 +2313,10 @@ class LlmProviders(str, Enum):
     LLAMA = "meta_llama"
     NSCALE = "nscale"
     PG_VECTOR = "pg_vector"
+    AIS = "ais"
+    ALIYUN = "aliyun"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 # Create a set of all provider values for quick lookup
