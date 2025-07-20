@@ -298,7 +298,7 @@ class ProxyInitializationHelpers:
     def _get_loop_type():
         """Helper function to determine the event loop type based on platform"""
         if sys.platform in ("win32", "cygwin", "cli"):
-            return None  # Let uvicorn choose the default loop on Windows
+            return "winloop"  # Let uvicorn choose the default loop on Windows
         return "uvloop"
 
 @click.command()
