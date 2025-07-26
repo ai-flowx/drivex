@@ -2319,6 +2319,10 @@ class LlmProviders(str, Enum):
     HYPERBOLIC = "hyperbolic"
     RECRAFT = "recraft"
     AUTO_ROUTER = "auto_router"
+    AIS = "ais"
+    ALIYUN = "aliyun"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 # Create a set of all provider values for quick lookup
