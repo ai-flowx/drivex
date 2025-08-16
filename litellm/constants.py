@@ -291,6 +291,9 @@ LITELLM_EMBEDDING_PROVIDERS_SUPPORTING_INPUT_ARRAY_OF_TOKENS = [
     "azure",
     "hosted_vllm",
     "nebius",
+    "aliyun",
+    "nebulacoder",
+    "siliconflow",
 ]
 
 
@@ -416,6 +419,9 @@ openai_compatible_endpoints: List = [
     "https://api.morphllm.com/v1",
     "https://api.lambda.ai/v1",
     "https://api.hyperbolic.xyz/v1",
+    "dashscope.aliyuncs.com/compatible-mode/v1",
+    "api.nebulacoder.ai/v1",
+    "api.siliconflow.cn/v1",
 ]
 
 
@@ -457,6 +463,9 @@ openai_compatible_providers: List = [
     "morph",
     "lambda_ai",
     "hyperbolic",
+    "aliyun",
+    "nebulacoder",
+    "siliconflow",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`
