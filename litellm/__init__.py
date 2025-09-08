@@ -520,6 +520,9 @@ cometapi_models: Set = set()
 oci_models: Set = set()
 vercel_ai_gateway_models: Set = set()
 volcengine_models: Set = set()
+aliyun_models: Set = set()
+nebulacoder_models: Set = set()
+siliconflow_models: Set = set()
 
 
 def is_bedrock_pricing_only_model(key: str) -> bool:
@@ -734,6 +737,12 @@ def add_known_models():
             oci_models.add(key)
         elif value.get("litellm_provider") == "volcengine":
             volcengine_models.add(key)
+        elif value.get("litellm_provider") == "aliyun":
+            aliyun_models.append(key)
+        elif value.get("litellm_provider") == "nebulacoder":
+            nebulacoder_models.append(key)
+        elif value.get("litellm_provider") == "siliconflow":
+            siliconflow_models.append(key)
 
 
 add_known_models()
@@ -828,6 +837,9 @@ model_list = list(
     | heroku_models
     | vercel_ai_gateway_models
     | volcengine_models
+    | aliyun_models
+    | nebulacoder_models
+    | siliconflow_models
 )
 
 model_list_set = set(model_list)
@@ -909,6 +921,9 @@ models_by_provider: dict = {
     "cometapi": cometapi_models,
     "oci": oci_models,
     "volcengine": volcengine_models,
+    "aliyun": aliyun_models,
+    "nebulacoder": nebulacoder_models,
+    "siliconflow": siliconflow_models,
 }
 
 # mapping for those models which have larger equivalents
@@ -1254,6 +1269,12 @@ from .llms.morph.chat.transformation import MorphChatConfig
 from .llms.lambda_ai.chat.transformation import LambdaAIChatConfig
 from .llms.hyperbolic.chat.transformation import HyperbolicChatConfig
 from .llms.vercel_ai_gateway.chat.transformation import VercelAIGatewayConfig
+from .llms.aliyun.chat.transformation import AliyunChatConfig
+from .llms.nebulacoder.chat.transformation import NebulaCoderChatConfig
+from .llms.nebulacoder.embedding.transformation import NebulaCoderEmbeddingConfig
+from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
+from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfig
+from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
 from .main import *  # type: ignore
 from .integrations import *
 from .llms.custom_httpx.async_client_cleanup import close_litellm_async_clients

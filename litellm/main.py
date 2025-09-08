@@ -1954,6 +1954,93 @@ def completion(  # type: ignore # noqa: PLR0915
             logging.post_call(
                 input=messages, api_key=api_key, original_response=response
             )
+        elif custom_llm_provider == "aliyun":
+                ## COMPLETION CALL
+                try:
+                    response = base_llm_http_handler.completion(
+                        model=model,
+                        messages=messages,
+                        headers=headers,
+                        model_response=model_response,
+                        api_key=api_key,
+                        api_base=api_base,
+                        acompletion=acompletion,
+                        logging_obj=logging,
+                        optional_params=optional_params,
+                        litellm_params=litellm_params,
+                        timeout=timeout,  # type: ignore
+                        client=client,
+                        custom_llm_provider=custom_llm_provider,
+                        encoding=encoding,
+                        stream=stream,
+                    )
+                except Exception as e:
+                    ## LOGGING - log the original exception returned
+                    logging.post_call(
+                        input=messages,
+                        api_key=api_key,
+                        original_response=str(e),
+                        additional_args={"headers": headers},
+                    )
+                    raise e
+        elif custom_llm_provider == "nebulacoder":
+            ## COMPLETION CALL
+            try:
+                response = base_llm_http_handler.completion(
+                    model=model,
+                    messages=messages,
+                    headers=headers,
+                    model_response=model_response,
+                    api_key=api_key,
+                    api_base=api_base,
+                    acompletion=acompletion,
+                    logging_obj=logging,
+                    optional_params=optional_params,
+                    litellm_params=litellm_params,
+                    timeout=timeout,  # type: ignore
+                    client=client,
+                    custom_llm_provider=custom_llm_provider,
+                    encoding=encoding,
+                    stream=stream,
+                )
+            except Exception as e:
+                ## LOGGING - log the original exception returned
+                logging.post_call(
+                    input=messages,
+                    api_key=api_key,
+                    original_response=str(e),
+                    additional_args={"headers": headers},
+                )
+                raise e
+        elif custom_llm_provider == "siliconflow":
+            ## COMPLETION CALL
+            try:
+                response = base_llm_http_handler.completion(
+                    model=model,
+                    messages=messages,
+                    headers=headers,
+                    model_response=model_response,
+                    api_key=api_key,
+                    api_base=api_base,
+                    acompletion=acompletion,
+                    logging_obj=logging,
+                    optional_params=optional_params,
+                    litellm_params=litellm_params,
+                    timeout=timeout,  # type: ignore
+                    client=client,
+                    custom_llm_provider=custom_llm_provider,
+                    encoding=encoding,
+                    stream=stream,
+                )
+            except Exception as e:
+                ## LOGGING - log the original exception returned
+                logging.post_call(
+                    input=messages,
+                    api_key=api_key,
+                    original_response=str(e),
+                    additional_args={"headers": headers},
+                )
+                raise e
         elif (
             model in litellm.open_ai_chat_completion_models
             or custom_llm_provider == "custom_openai"
@@ -4070,6 +4157,8 @@ def embedding(  # noqa: PLR0915
             or custom_llm_provider == "hosted_vllm"
             or custom_llm_provider == "llamafile"
             or custom_llm_provider == "lm_studio"
+            or custom_llm_provider == "nebulacoder"
+            or custom_llm_provider == "siliconflow"
         ):
             api_base = (
                 api_base or litellm.api_base or get_secret_str("OPENAI_LIKE_API_BASE")
@@ -4087,6 +4176,9 @@ def embedding(  # noqa: PLR0915
             if extra_headers is not None:
                 optional_params["extra_headers"] = extra_headers
 
+            # Set custom_endpoint=True for nebulacoder to avoid double /embeddings in URL
+            custom_endpoint = custom_llm_provider == "nebulacoder"
+
             ## EMBEDDING CALL
             response = openai_like_embedding.embedding(
                 model=model,
@@ -4099,6 +4191,7 @@ def embedding(  # noqa: PLR0915
                 optional_params=optional_params,
                 client=client,
                 aembedding=aembedding,
+                custom_endpoint=custom_endpoint,
             )
         elif custom_llm_provider == "cohere" or custom_llm_provider == "cohere_chat":
             cohere_key = (

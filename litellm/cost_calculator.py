@@ -69,6 +69,15 @@ from litellm.types.llms.openai import (
     ResponseAPIUsage,
     ResponsesAPIResponse,
 )
+from litellm.llms.aliyun.cost_calculator import (
+    cost_per_token as aliyun_cost_per_token,
+)
+from litellm.llms.nebulacoder.cost_calculator import (
+    cost_per_token as nebulacoder_cost_per_token,
+)
+from litellm.llms.siliconflow.cost_calculator import (
+    cost_per_token as siliconflow_cost_per_token,
+)
 from litellm.types.rerank import RerankBilledUnits, RerankResponse
 from litellm.types.utils import (
     CallTypesLiteral,
@@ -344,6 +353,12 @@ def cost_per_token(  # noqa: PLR0915
         return perplexity_cost_per_token(model=model, usage=usage_block)
     elif custom_llm_provider == "xai":
         return xai_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "aliyun":
+        return aliyun_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "nebulacoder":
+        return nebulacoder_cost_per_token(model=model, usage=usage_block)
+    elif custom_llm_provider == "siliconflow":
+        return siliconflow_cost_per_token(model=model, usage=usage_block)
     else:
         model_info = _cached_get_model_info_helper(
             model=model, custom_llm_provider=custom_llm_provider
