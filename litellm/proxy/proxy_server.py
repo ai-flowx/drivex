@@ -249,7 +249,7 @@ from litellm.proxy.management_endpoints.internal_user_endpoints import (
     router as internal_user_router,
 )
 from litellm.proxy.management_endpoints.internal_user_endpoints import (
-    user_update,
+    _update_single_user_helper,
 )
 from litellm.proxy.management_endpoints.key_management_endpoints import (
     delete_verification_tokens,
@@ -7597,11 +7597,18 @@ async def login(request: Request):  # noqa: PLR0915
         # Admin is Authe'd in - generate key for the UI to access Proxy
 
         # ensure this user is set as the proxy admin, in this route there is no sso, we can assume this user is only the admin
-        await user_update(
-            data=UpdateUserRequest(
+        # Create a UserAPIKeyAuth object for the admin user
+        admin_auth = UserAPIKeyAuth(
+            user_id=key_user_id,
+            user_role=user_role,
+            api_key=None,  # Admin doesn't need a specific API key for this operation
+        )
+        await _update_single_user_helper(
+            user_request=UpdateUserRequest(
                 user_id=key_user_id,
                 user_role=user_role,
-            )
+            ),
+            user_api_key_dict=admin_auth,
         )
         if os.getenv("DATABASE_URL") is not None:
             response = await generate_key_helper_fn(
