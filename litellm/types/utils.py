@@ -2528,6 +2528,8 @@ class LlmProviders(str, Enum):
     WANDB = "wandb"
     OVHCLOUD = "ovhcloud"
     LEMONADE = "lemonade"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 # Create a set of all provider values for quick lookup
