@@ -333,9 +333,9 @@ def test_process_anthropic_headers_with_no_matching_headers():
     "tool_type, tool_config, message_content",
     [
         (
-            "computer_20241022",
+            "computer_20250124",
             {
-                "type": "computer_20241022",
+                "type": "computer_20250124",
                 "function": {
                     "name": "computer",
                     "parameters": {
@@ -879,7 +879,7 @@ async def test_anthropic_structured_output():
     from litellm import acompletion
 
     args = {
-        "model": "claude-3-5-sonnet-20240620",
+        "model": "claude-sonnet-4-5-20250929",
         "seed": 3015206306868917280,
         "stop": None,
         "messages": [
@@ -1282,7 +1282,7 @@ def test_anthropic_text_editor():
                 "content": "There'''s a syntax error in my primes.py file. Can you help me fix it?",
             }
         ],
-        "tools": [{"type": "text_editor_20250124", "name": "str_replace_editor"}],
+        "tools": [{"type": "text_editor_20250728", "name": "str_replace_editor"}],
     }
 
     try:
