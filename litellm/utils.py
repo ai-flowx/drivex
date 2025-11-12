@@ -7731,6 +7731,10 @@ class ProviderConfigManager:
             )
 
             return VertexAIVideoConfig()
+        elif LlmProviders.RUNWAYML == provider:
+            from litellm.llms.runway.videos.transformation import RunwayMLVideoConfig
+
+            return RunwayMLVideoConfig()
         return None
 
     @staticmethod
