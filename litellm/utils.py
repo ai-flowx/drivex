@@ -7513,7 +7513,7 @@ class ProviderConfigManager:
             )
 
             return BedrockPassthroughConfig()
-        elif LlmProviders.VLLM == provider:
+        elif LlmProviders.VLLM == provider or LlmProviders.HOSTED_VLLM == provider:
             from litellm.llms.vllm.passthrough.transformation import (
                 VLLMPassthroughConfig,
             )
