@@ -399,6 +399,8 @@ LITELLM_EMBEDDING_PROVIDERS_SUPPORTING_INPUT_ARRAY_OF_TOKENS = [
     "azure",
     "hosted_vllm",
     "nebius",
+    "nebulacoder",
+    "siliconflow",
 ]
 
 
@@ -531,6 +533,8 @@ openai_compatible_endpoints: List = [
     "https://ai-gateway.vercel.sh/v1",
     "https://api.inference.wandb.ai/v1",
     "https://api.clarifai.com/v2/ext/openai/v1",
+    "api.nebulacoder.ai/v1",
+    "api.siliconflow.cn/v1",
 ]
 
 
@@ -579,6 +583,8 @@ openai_compatible_providers: List = [
     "cometapi",
     "clarifai",
     "docker_model_runner",
+    "nebulacoder",
+    "siliconflow",
 ]
 openai_text_completion_compatible_providers: List = (
     [  # providers that support `/v1/completions`
