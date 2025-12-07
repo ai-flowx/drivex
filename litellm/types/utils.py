@@ -3004,6 +3004,8 @@ class LlmProviders(str, Enum):
     LEMONADE = "lemonade"
     AMAZON_NOVA = "amazon_nova"
     A2A_AGENT = "a2a_agent"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 # Create a set of all provider values for quick lookup
