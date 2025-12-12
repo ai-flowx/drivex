@@ -579,6 +579,8 @@ ovhcloud_embedding_models: Set = set()
 lemonade_models: Set = set()
 docker_model_runner_models: Set = set()
 amazon_nova_models: Set = set()
+nebulacoder_models: Set = set()
+siliconflow_models: Set = set()
 
 
 def is_bedrock_pricing_only_model(key: str) -> bool:
@@ -823,6 +825,10 @@ def add_known_models():
             docker_model_runner_models.add(key)
         elif value.get("litellm_provider") == "amazon_nova":
             amazon_nova_models.add(key)
+        elif value.get("litellm_provider") == "nebulacoder":
+            nebulacoder_models.append(key)
+        elif value.get("litellm_provider") == "siliconflow":
+            siliconflow_models.append(key)
 
 
 add_known_models()
@@ -931,6 +937,8 @@ model_list = list(
     | lemonade_models
     | docker_model_runner_models
     | set(clarifai_models)
+    | nebulacoder_models
+    | siliconflow_models
 )
 
 model_list_set = set(model_list)
@@ -1025,6 +1033,8 @@ models_by_provider: dict = {
     "lemonade": lemonade_models,
     "clarifai": clarifai_models,
     "amazon_nova": amazon_nova_models,
+    "nebulacoder": nebulacoder_models,
+    "siliconflow": siliconflow_models,
 }
 
 # mapping for those models which have larger equivalents
@@ -1375,6 +1385,11 @@ from .llms.cometapi.embed.transformation import CometAPIEmbeddingConfig
 from .llms.lemonade.chat.transformation import LemonadeChatConfig
 from .llms.snowflake.embedding.transformation import SnowflakeEmbeddingConfig
 from .llms.amazon_nova.chat.transformation import AmazonNovaChatConfig
+from .llms.nebulacoder.chat.transformation import NebulaCoderChatConfig
+from .llms.nebulacoder.embedding.transformation import NebulaCoderEmbeddingConfig
+from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
+from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfig
+from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
 from .main import *  # type: ignore
 
 # Skills API
