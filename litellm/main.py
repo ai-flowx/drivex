@@ -2263,7 +2263,7 @@ def completion(  # type: ignore # noqa: PLR0915
                     timeout=timeout,  # type: ignore
                     client=client,
                     custom_llm_provider=custom_llm_provider,
-                    encoding=encoding,
+                    encoding=_get_encoding(),
                     stream=stream,
                 )
             except Exception as e:
@@ -2292,7 +2292,7 @@ def completion(  # type: ignore # noqa: PLR0915
                     timeout=timeout,  # type: ignore
                     client=client,
                     custom_llm_provider=custom_llm_provider,
-                    encoding=encoding,
+                    encoding=_get_encoding(),
                     stream=stream,
                 )
             except Exception as e:
