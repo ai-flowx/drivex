@@ -36,11 +36,15 @@ class NebulaCoderEmbeddingConfig:
             and v is not None
         }
 
-    def get_supported_openai_params(self) -> List[str]:
+    def get_supported_openai_params(self, model: str) -> List[str]:
         return ["dimensions"]
 
     def map_openai_params(
-        self, non_default_params: dict, optional_params: dict
+        self,
+        non_default_params: dict,
+        optional_params: dict,
+        model: str,
+        drop_params: bool,
     ) -> dict:
         if "dimensions" in non_default_params:
             optional_params["dimensions"] = non_default_params["dimensions"]

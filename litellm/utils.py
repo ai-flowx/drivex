@@ -7697,6 +7697,10 @@ class ProviderConfigManager:
             return litellm.FireworksAIRerankConfig()
         elif litellm.LlmProviders.VOYAGE == provider:
             return litellm.VoyageRerankConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowRerankConfig()
+        elif litellm.LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderRerankConfig()
         return litellm.CohereRerankConfig()
 
     @staticmethod

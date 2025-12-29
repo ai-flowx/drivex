@@ -1462,6 +1462,7 @@ if TYPE_CHECKING:
     from .llms.amazon_nova.chat.transformation import AmazonNovaChatConfig as AmazonNovaChatConfig
     from .llms.nebulacoder.chat.transformation import NebulaCoderChatConfig
     from .llms.nebulacoder.embedding.transformation import NebulaCoderEmbeddingConfig
+    from .llms.nebulacoder.rerank.transformation import NebulaCoderRerankConfig
     from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
     from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfig
     from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
