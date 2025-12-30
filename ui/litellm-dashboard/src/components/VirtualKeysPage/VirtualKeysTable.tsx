@@ -1,25 +1,38 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { ColumnDef, ColumnResizeMode, ColumnResizeDirection } from "@tanstack/react-table";
-import { Select, SelectItem } from "@tremor/react";
-import { Button } from "@tremor/react";
-import KeyInfoView from "./templates/key_info_view";
-import { Tooltip } from "antd";
-import { Team, KeyResponse } from "./key_team_helpers/key_list";
-import FilterComponent from "./molecules/filter";
-import { FilterOption } from "./molecules/filter";
-import { Organization, userListCall } from "./networking";
-import { useFilterLogic } from "./key_team_helpers/filter_logic";
 import { Setter } from "@/types";
-import { updateExistingKeys } from "@/utils/dataUtils";
-import { flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
-import { Table, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, Icon } from "@tremor/react";
-import { SwitchVerticalIcon, ChevronUpIcon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/outline";
-import { Badge, Text } from "@tremor/react";
-import { getModelDisplayName } from "./key_team_helpers/fetch_available_models_team_key";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
+import { formatNumberWithCommas, updateExistingKeys } from "@/utils/dataUtils";
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, SwitchVerticalIcon } from "@heroicons/react/outline";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+import {
+  Badge,
+  Button,
+  Icon,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+  Text,
+} from "@tremor/react";
+import { Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
+import { getModelDisplayName } from "../key_team_helpers/fetch_available_models_team_key";
+import { useFilterLogic } from "../key_team_helpers/filter_logic";
+import { KeyResponse, Team } from "../key_team_helpers/key_list";
+import FilterComponent, { FilterOption } from "../molecules/filter";
+import { Organization } from "../networking";
+import KeyInfoView from "../templates/key_info_view";
+import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 
-interface AllKeysTableProps {
+interface VirtualKeysTableProps {
   keys: KeyResponse[];
   setKeys: (keys: KeyResponse[] | ((prev: KeyResponse[]) => KeyResponse[])) => void;
   isLoading?: boolean;
@@ -35,9 +48,6 @@ interface AllKeysTableProps {
   setSelectedTeam: (team: Team | null) => void;
   selectedKeyAlias: string | null;
   setSelectedKeyAlias: Setter<string | null>;
-  accessToken: string | null;
-  userID: string | null;
-  userRole: string | null;
   organizations: Organization[] | null;
   setCurrentOrg: React.Dispatch<React.SetStateAction<Organization | null>>;
   refresh?: () => void;
@@ -46,61 +56,14 @@ interface AllKeysTableProps {
     sortBy: string;
     sortOrder: "asc" | "desc";
   };
-  premiumUser: boolean;
-  setAccessToken?: (token: string) => void;
 }
-
-// Define columns similar to our logs table
-
-interface UserResponse {
-  user_id: string;
-  user_email: string;
-  user_role: string;
-}
-
-const TeamFilter = ({
-  teams,
-  selectedTeam,
-  setSelectedTeam,
-}: {
-  teams: Team[] | null;
-  selectedTeam: Team | null;
-  setSelectedTeam: (team: Team | null) => void;
-}) => {
-  const handleTeamChange = (value: string) => {
-    const team = teams?.find((t) => t.team_id === value);
-    setSelectedTeam(team || null);
-  };
-
-  return (
-    <div className="mb-4">
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-600">Where Team is</span>
-        <Select
-          value={selectedTeam?.team_id || ""}
-          onValueChange={handleTeamChange}
-          placeholder="Team ID"
-          className="w-[400px]"
-        >
-          <SelectItem value="team_id">Team ID</SelectItem>
-          {teams?.map((team) => (
-            <SelectItem key={team.team_id} value={team.team_id}>
-              <span className="font-medium">{team.team_alias}</span>{" "}
-              <span className="text-gray-500">({team.team_id})</span>
-            </SelectItem>
-          ))}
-        </Select>
-      </div>
-    </div>
-  );
-};
 
 /**
- * AllKeysTable – a new table for keys that mimics the table styling used in view_logs.
+ * VirtualKeysTable – a new table for keys that mimics the table styling used in view_logs.
  * The team selector and filtering have been removed so that all keys are shown.
  */
 
-export function AllKeysTable({
+export function VirtualKeysTable({
   keys,
   setKeys,
   isLoading = false,
@@ -108,25 +71,13 @@ export function AllKeysTable({
   onPageChange,
   pageSize = 50,
   teams,
-  selectedTeam,
-  setSelectedTeam,
-  selectedKeyAlias,
-  setSelectedKeyAlias,
-  accessToken,
-  userID,
-  userRole,
   organizations,
-  setCurrentOrg,
   refresh,
   onSortChange,
   currentSort,
-  premiumUser,
-  setAccessToken,
-}: AllKeysTableProps) {
+}: VirtualKeysTableProps) {
+  const { accessToken, userId: userID, userRole, premiumUser } = useAuthorized();
   const [selectedKeyId, setSelectedKeyId] = useState<string | null>(null);
-  const [userList, setUserList] = useState<UserResponse[]>([]);
-  const [columnResizeMode, setColumnResizeMode] = React.useState<ColumnResizeMode>("onChange");
-  const [columnResizeDirection, setColumnResizeDirection] = React.useState<ColumnResizeDirection>("ltr");
   const [sorting, setSorting] = React.useState<SortingState>(() => {
     if (currentSort) {
       return [
@@ -152,19 +103,7 @@ export function AllKeysTable({
       keys,
       teams,
       organizations,
-      accessToken,
     });
-
-  useEffect(() => {
-    if (accessToken) {
-      const user_IDs = keys.map((key) => key.user_id).filter((id) => id !== null);
-      const fetchUserList = async () => {
-        const userListData = await userListCall(accessToken, user_IDs, 1, 100);
-        setUserList(userListData.users);
-      };
-      fetchUserList();
-    }
-  }, [accessToken, keys]);
 
   // Add a useEffect to call refresh when a key is created
   useEffect(() => {
@@ -269,18 +208,19 @@ export function AllKeysTable({
     },
     {
       id: "user_email",
-      accessorKey: "user_id",
+      accessorKey: "user",
       header: "User Email",
       size: 160,
       cell: (info) => {
-        const userId = info.getValue() as string;
-        const user = userList.find((u) => u.user_id === userId);
-        return user?.user_email ? (
-          <Tooltip title={user?.user_email}>
-            <span>{user?.user_email.slice(0, 20)}...</span>
+        const user = info.getValue() as any;
+        const value = user?.user_email;
+        const width = info.cell.column.getSize();
+        return (
+          <Tooltip title={value}>
+            <span className={`font-mono text-xs truncate block`} style={{ maxWidth: width, overflow: "hidden" }}>
+              {value ?? "-"}
+            </span>
           </Tooltip>
-        ) : (
-          "-"
         );
       },
     },
@@ -552,8 +492,8 @@ export function AllKeysTable({
   const table = useReactTable({
     data: filteredKeys,
     columns: columns.filter((col) => col.id !== "expander"),
-    columnResizeMode,
-    columnResizeDirection,
+    columnResizeMode: "onChange",
+    columnResizeDirection: "ltr",
     state: {
       sorting,
     },
@@ -614,12 +554,7 @@ export function AllKeysTable({
             setKeys((keys) => keys.filter((key) => key.token !== selectedKeyId));
             if (refresh) refresh(); // Minimal fix: refresh the full key list after a delete
           }}
-          accessToken={accessToken}
-          userID={userID}
-          userRole={userRole}
           teams={allTeams}
-          premiumUser={premiumUser}
-          setAccessToken={setAccessToken}
         />
       ) : (
         <div className="border-b py-4 flex-1 overflow-hidden">
@@ -731,10 +666,6 @@ export function AllKeysTable({
                                   userSelect: "none",
                                   touchAction: "none",
                                   opacity: header.column.getIsResizing() ? 1 : 0,
-                                  transform:
-                                    columnResizeMode === "onEnd" && header.column.getIsResizing()
-                                      ? `translateX(${(table.options.columnResizeDirection === "rtl" ? -1 : 1) * (table.getState().columnSizingInfo.deltaOffset ?? 0)}px)`
-                                      : "",
                                 }}
                               />
                             </div>
