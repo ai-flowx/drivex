@@ -4677,9 +4677,6 @@ def embedding(  # noqa: PLR0915
             if extra_headers is not None:
                 optional_params["extra_headers"] = extra_headers
 
-            # Set custom_endpoint=True for nebulacoder to avoid double /embeddings in URL
-            custom_endpoint = custom_llm_provider == "nebulacoder"
-
             ## EMBEDDING CALL
             response = openai_like_embedding.embedding(
                 model=model,
@@ -4692,7 +4689,6 @@ def embedding(  # noqa: PLR0915
                 optional_params=optional_params,
                 client=client,
                 aembedding=aembedding,
-                custom_endpoint=custom_endpoint,
             )
         elif custom_llm_provider == "cohere" or custom_llm_provider == "cohere_chat":
             cohere_key = (
