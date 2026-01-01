@@ -103,3 +103,4 @@ LAZY_LOADING_IMPROVEMENTS.md
 **/test-results
 **/playwright-report
 **/*.storageState.json
+**/coverage
