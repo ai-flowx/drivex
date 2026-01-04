@@ -555,6 +555,8 @@ stability_models: Set = set()
 github_copilot_models: Set = set()
 minimax_models: Set = set()
 aws_polly_models: Set = set()
+nebulacoder_models: Set = set()
+siliconflow_models: Set = set()
 
 
 def is_bedrock_pricing_only_model(key: str) -> bool:
@@ -807,6 +809,10 @@ def add_known_models():
             minimax_models.add(key)
         elif value.get("litellm_provider") == "aws_polly":
             aws_polly_models.add(key)
+        elif value.get("litellm_provider") == "nebulacoder":
+            nebulacoder_models.append(key)
+        elif value.get("litellm_provider") == "siliconflow":
+            siliconflow_models.append(key)
 
 
 add_known_models()
@@ -915,6 +921,8 @@ model_list = list(
     | lemonade_models
     | docker_model_runner_models
     | set(clarifai_models)
+    | nebulacoder_models
+    | siliconflow_models
 )
 
 model_list_set = set(model_list)
@@ -1013,6 +1021,8 @@ models_by_provider: dict = {
     "github_copilot": github_copilot_models,
     "minimax": minimax_models,
     "aws_polly": aws_polly_models,
+    "nebulacoder": nebulacoder_models,
+    "siliconflow": siliconflow_models,
 }
 
 # mapping for those models which have larger equivalents
@@ -1458,6 +1468,12 @@ if TYPE_CHECKING:
     from .llms.lemonade.chat.transformation import LemonadeChatConfig as LemonadeChatConfig
     from .llms.snowflake.embedding.transformation import SnowflakeEmbeddingConfig as SnowflakeEmbeddingConfig
     from .llms.amazon_nova.chat.transformation import AmazonNovaChatConfig as AmazonNovaChatConfig
+    from .llms.nebulacoder.chat.transformation import NebulaCoderChatConfig
+    from .llms.nebulacoder.embedding.transformation import NebulaCoderEmbeddingConfig
+    from .llms.nebulacoder.rerank.transformation import NebulaCoderRerankConfig
+    from .llms.siliconflow.chat.transformation import SiliconFlowChatConfig
+    from .llms.siliconflow.embedding.transformation import SiliconFlowEmbeddingConfig
+    from .llms.siliconflow.rerank.transformation import SiliconFlowRerankConfig
     from litellm.caching.llm_caching_handler import LLMClientCache
     from litellm.types.llms.bedrock import COHERE_EMBEDDING_INPUT_TYPES
     from litellm.types.utils import (

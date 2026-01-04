@@ -271,6 +271,12 @@ LLM_CONFIG_NAMES = (
     "LemonadeChatConfig",
     "SnowflakeEmbeddingConfig",
     "AmazonNovaChatConfig",
+    "NebulaCoderChatConfig",
+    "NebulaCoderEmbeddingConfig",
+    "NebulaCoderRerankConfig",
+    "SiliconFlowChatConfig",
+    "SiliconFlowEmbeddingConfig",
+    "SiliconFlowRerankConfig",
 )
 
 # Types that support lazy loading via _lazy_import_types
@@ -584,6 +590,12 @@ _LLM_CONFIGS_IMPORT_MAP = {
     "LemonadeChatConfig": (".llms.lemonade.chat.transformation", "LemonadeChatConfig"),
     "SnowflakeEmbeddingConfig": (".llms.snowflake.embedding.transformation", "SnowflakeEmbeddingConfig"),
     "AmazonNovaChatConfig": (".llms.amazon_nova.chat.transformation", "AmazonNovaChatConfig"),
+    "NebulaCoderChatConfig": (".llms.nebulacoder.chat.transformation", "NebulaCoderChatConfig"),
+    "NebulaCoderEmbeddingConfig": (".llms.nebulacoder.embedding.transformation", "NebulaCoderEmbeddingConfig"),
+    "NebulaCoderRerankConfig": (".llms.nebulacoder.rerank.transformation", "NebulaCoderRerankConfig"),
+    "SiliconFlowChatConfig": (".llms.siliconflow.chat.transformation", "SiliconFlowChatConfig"),
+    "SiliconFlowEmbeddingConfig": (".llms.siliconflow.embedding.transformation", "SiliconFlowEmbeddingConfig"),
+    "SiliconFlowRerankConfig": (".llms.siliconflow.rerank.transformation", "SiliconFlowRerankConfig"),
 }
 
 # Export all name tuples and import maps for use in _lazy_imports.py
