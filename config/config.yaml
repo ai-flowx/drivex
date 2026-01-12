@@ -1,0 +1,356 @@
+model_list:
+  - model_name: cloudflare-gemini-3-flash-preview
+    litellm_params:
+      model: openai/gemini-3-flash-preview
+      api_base: https://gemini-balance-do-cloudflare.lemonjia.workers.dev/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: cloudflare-gemini-3-flash-preview
+    litellm_params:
+      model: openai/gemini-3-flash-preview
+      api_base: https://openai-gemini-cloudflare.lemonjia.workers.dev/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: cloudflare-gemini-flash-latest
+    litellm_params:
+      model: openai/gemini-flash-latest
+      api_base: https://gemini-balance-do-cloudflare.lemonjia.workers.dev/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: cloudflare-gemini-flash-latest
+    litellm_params:
+      model: openai/gemini-flash-latest
+      api_base: https://openai-gemini-cloudflare.lemonjia.workers.dev/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: cloudflare-gemini-flash-lite-latest
+    litellm_params:
+      model: openai/gemini-flash-lite-latest
+      api_base: https://gemini-balance-do-cloudflare.lemonjia.workers.dev/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: cloudflare-gemini-flash-lite-latest
+    litellm_params:
+      model: openai/gemini-flash-lite-latest
+      api_base: https://openai-gemini-cloudflare.lemonjia.workers.dev/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: github-mistral-ai-Codestral-2501
+    litellm_params:
+      model: openai/mistral-ai/Codestral-2501
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: github-openai-gpt-4o
+    litellm_params:
+      model: openai/openai/gpt-4o
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: github-openai-gpt-4.1
+    litellm_params:
+      model: openai/openai/gpt-4.1
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: github-openai-gpt-5
+    litellm_params:
+      model: openai/openai/gpt-5
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: github-openai-o1
+    litellm_params:
+      model: openai/openai/o1
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: github-openai-o3
+    litellm_params:
+      model: openai/openai/o3
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: github-openai-text-embedding-3-large
+    litellm_params:
+      model: openai/openai/text-embedding-3-large
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: github-openai-text-embedding-3-small
+    litellm_params:
+      model: openai/openai/text-embedding-3-small
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: github-xai-grok-3
+    litellm_params:
+      model: openai/xai/grok-3
+      api_base: https://models.github.ai/inference
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-cogito-2.1
+    litellm_params:
+      model: openai/cogito-2.1:671b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-deepseek-v3.1
+    litellm_params:
+      model: openai/deepseek-v3.1:671b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-deepseek-v3.2
+    litellm_params:
+      model: openai/deepseek-v3.2:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-devstral-2
+    litellm_params:
+      model: openai/devstral-2:123b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-devstral-small-2
+    litellm_params:
+      model: openai/devstral-small-2:24b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-gemini-3-flash-preview
+    litellm_params:
+      model: openai/gemini-3-flash-preview:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: ollama-gemma3
+    litellm_params:
+      model: openai/gemma3:27b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: ollama-glm-4.6
+    litellm_params:
+      model: openai/glm-4.6:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-glm-4.7
+    litellm_params:
+      model: openai/glm-4.7:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-gpt-oss
+    litellm_params:
+      model: openai/gpt-oss:120b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-kimi-k2
+    litellm_params:
+      model: openai/kimi-k2:1t-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-kimi-k2-thinking
+    litellm_params:
+      model: openai/kimi-k2-thinking:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-minimax-m2
+    litellm_params:
+      model: openai/minimax-m2:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-minimax-m2.1
+    litellm_params:
+      model: openai/minimax-m2.1:cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-ministral-3
+    litellm_params:
+      model: openai/ministral-3:14b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: ollama-mistral-large-3
+    litellm_params:
+      model: openai/mistral-large-3:675b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-nemotron-3-nano
+    litellm_params:
+      model: openai/nemotron-3-nano:30b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-qwen3-coder
+    litellm_params:
+      model: openai/qwen3-coder:480b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-qwen3-next
+    litellm_params:
+      model: openai/qwen3-next:80b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-qwen3-vl
+    litellm_params:
+      model: openai/qwen3-vl:235b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: ollama-qwen3-vl-instruct
+    litellm_params:
+      model: openai/qwen3-vl:235b-instruct-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: ollama-osmosis-osmosis-apply-1.7b
+    litellm_params:
+      model: ollama/Osmosis/Osmosis-Apply-1.7B
+      api_base: http://10.89.34.87:11434/v1
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: ollama-rnj-1
+    litellm_params:
+      model: openai/rnj-1:8b-cloud
+      api_base: https://ollama.com/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: openrouter-google-gemma-3-27b-it
+    litellm_params:
+      model: openrouter/google/gemma-3-27b-it:free
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: openrouter-kwaipilot-kat-coder-pro
+    litellm_params:
+      model: openrouter/kwaipilot/kat-coder-pro:free
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: openrouter-nvidia-nemotron-nano-12b-v2-vl
+    litellm_params:
+      model: openrouter/nvidia/nemotron-nano-12b-v2-vl:free
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True
+  - model_name: openrouter-z-ai-glm-4.5
+    litellm_params:
+      model: openrouter/z-ai/glm-4.5-air:free
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: siliconflow-BAAI-bge-m3
+    litellm_params:
+      model: siliconflow/BAAI/bge-m3
+      api_base: https://api.siliconflow.cn/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: siliconflow-BAAI-bge-reranker-v2-m3
+    litellm_params:
+      model: siliconflow/BAAI/bge-reranker-v2-m3
+      api_base: https://api.siliconflow.cn/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: False
+  - model_name: siliconflow-deepseek-ai-deepseek-ocr
+    litellm_params:
+      model: siliconflow/deepseek-ai/DeepSeek-OCR
+      api_base: https://api.siliconflow.cn/v1
+      api_key: YOUR_KEY
+      api_version: "2025-04-21"
+    model_info:
+      supports_vision: True

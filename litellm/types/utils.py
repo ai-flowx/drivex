@@ -3030,6 +3030,8 @@ class LlmProviders(str, Enum):
     POE = "poe"
     CHUTES = "chutes"
     XIAOMI_MIMO = "xiaomi_mimo"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 
