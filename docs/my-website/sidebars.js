@@ -488,6 +488,7 @@ const sidebars = {
             "mcp_control",
             "mcp_cost",
             "mcp_guardrail",
+            "mcp_troubleshoot",
           ]
         },
         "anthropic_unified",
@@ -971,6 +972,14 @@ const sidebars = {
       ],
     },
     "troubleshoot",
+    {
+      type: "category",
+      label: "Issue Reporting",
+      items: [
+        "troubleshoot/cpu_issues",
+        "troubleshoot/memory_issues",
+      ],
+    },
   ],
 };
 
