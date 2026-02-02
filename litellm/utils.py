@@ -3333,6 +3333,30 @@ def get_optional_params_embeddings(  # noqa: PLR0915
             model=model,
             drop_params=drop_params if drop_params is not None else False,
         )
+    elif custom_llm_provider == "nebulacoder":
+        supported_params = get_supported_openai_params(
+            model=model,
+            custom_llm_provider="nebulacoder",
+            request_type="embeddings",
+        )
+        _check_valid_arg(supported_params=supported_params)
+        optional_params = litellm.NebulaCoderEmbeddingConfig().map_openai_params(
+            non_default_params=non_default_params, optional_params={}
+        )
+        final_params = {**optional_params, **kwargs}
+        return final_params
+    elif custom_llm_provider == "siliconflow":
+        supported_params = get_supported_openai_params(
+            model=model,
+            custom_llm_provider="siliconflow",
+            request_type="embeddings",
+        )
+        _check_valid_arg(supported_params=supported_params)
+        optional_params = litellm.SiliconFlowEmbeddingConfig().map_openai_params(
+            non_default_params=non_default_params, optional_params={}
+        )
+        final_params = {**optional_params, **kwargs}
+        return final_params
 
         final_params = {**optional_params, **kwargs}
         return final_params
@@ -3765,6 +3789,8 @@ def pre_process_optional_params(
             and custom_llm_provider != "vercel_ai_gateway"
             and custom_llm_provider != "nebius"
             and custom_llm_provider != "wandb"
+            and custom_llm_provider != "nebulacoder"
+            and custom_llm_provider != "siliconflow"
             and custom_llm_provider not in litellm.openai_compatible_providers
         ):
             if custom_llm_provider == "ollama":
@@ -4552,6 +4578,28 @@ def get_optional_params(  # noqa: PLR0915
                     else False
                 ),
             )
+    elif custom_llm_provider == "nebulacoder":
+      optional_params = litellm.OpenAIConfig().map_openai_params(
+          non_default_params=non_default_params,
+          optional_params=optional_params,
+          model=model,
+          drop_params=(
+              drop_params
+              if drop_params is not None and isinstance(drop_params, bool)
+              else False
+          ),
+    )
+    elif custom_llm_provider == "siliconflow":
+      optional_params = litellm.OpenAIConfig().map_openai_params(
+          non_default_params=non_default_params,
+          optional_params=optional_params,
+          model=model,
+          drop_params=(
+              drop_params
+              if drop_params is not None and isinstance(drop_params, bool)
+              else False
+          ),
+    )
     elif provider_config is not None:
         optional_params = provider_config.map_openai_params(
             non_default_params=non_default_params,
@@ -6282,6 +6330,16 @@ def validate_environment(  # noqa: PLR0915
                 keys_in_environment = True
             else:
                 missing_keys.append("MOONSHOT_API_KEY")
+        elif custom_llm_provider == "nebulacoder":
+            if "NEBULACODER_API_KEY" in os.environ:
+                keys_in_environment = True
+            else:
+                missing_keys.append("NEBULACODER_API_KEY")
+        elif custom_llm_provider == "siliconflow":
+            if "SILICONFLOW_API_KEY" in os.environ:
+                keys_in_environment = True
+            else:
+                missing_keys.append("SILICONFLOW_API_KEY")
     else:
         ## openai - chatcompletion + text completion
         if (
@@ -7900,6 +7958,8 @@ class ProviderConfigManager:
                 lambda: ProviderConfigManager._get_langgraph_config(),
                 False,
             ),
+            LlmProviders.NEBULACODER: (lambda: ProviderConfigManager._get_nebulacoder_config(), False),
+            LlmProviders.SILICONFLOW: (lambda: ProviderConfigManager._get_siliconflow_config(), False),
         }
 
     @staticmethod
@@ -7961,6 +8021,16 @@ class ProviderConfigManager:
         from litellm.llms.langgraph.chat.transformation import LangGraphConfig
 
         return LangGraphConfig()
+
+    @staticmethod
+    def _get_nebulacoder_config() -> BaseConfig:
+        """Get NebulaCoder config."""
+        return litellm.NebulaCoderChatConfig()
+
+    @staticmethod
+    def _get_siliconflow_config() -> BaseConfig:
+        """Get SiliconFlow config."""
+        return litellm.SiliconFlowChatConfig()
 
     @staticmethod
     def get_provider_chat_config(  # noqa: PLR0915
@@ -8080,6 +8150,10 @@ class ProviderConfigManager:
             )
 
             return SagemakerEmbeddingConfig.get_model_config(model)
+        elif litellm.LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderEmbeddingConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowEmbeddingConfig()
         return None
 
     @staticmethod
@@ -8121,6 +8195,10 @@ class ProviderConfigManager:
             return litellm.FireworksAIRerankConfig()
         elif litellm.LlmProviders.VOYAGE == provider:
             return litellm.VoyageRerankConfig()
+        elif litellm.LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowRerankConfig()
+        elif litellm.LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderRerankConfig()
         return litellm.CohereRerankConfig()
 
     @staticmethod
@@ -8310,6 +8388,10 @@ class ProviderConfigManager:
             from litellm.llms.azure_ai.common_utils import AzureFoundryModelInfo
 
             return AzureFoundryModelInfo(model=model)
+        elif LlmProviders.NEBULACODER == provider:
+            return litellm.NebulaCoderChatConfig()
+        elif LlmProviders.SILICONFLOW == provider:
+            return litellm.SiliconFlowChatConfig()
         return None
 
     @staticmethod
