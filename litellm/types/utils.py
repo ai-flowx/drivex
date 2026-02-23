@@ -3160,6 +3160,8 @@ class LlmProviders(str, Enum):
     CHUTES = "chutes"
     XIAOMI_MIMO = "xiaomi_mimo"
     LITELLM_AGENT = "litellm_agent"
+    NEBULACODER = "nebulacoder"
+    SILICONFLOW = "siliconflow"
 
 
 # Create a set of all provider values for quick lookup
