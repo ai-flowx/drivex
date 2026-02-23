@@ -1318,7 +1318,14 @@ class OpenAIChatCompletion(BaseLLM, BaseOpenAILLM):
     ) -> EmbeddingResponse:
         super().embedding()
         try:
-            data = {"model": model, "input": input, **optional_params}
+            # Import filter function to recursively remove callables from nested structures
+            from litellm.litellm_core_utils.core_helpers import filter_exceptions_from_params
+
+            # Filter out callable objects from optional_params to prevent JSON serialization errors
+            # Use recursive filter to handle nested dictionaries like extra_body
+            filtered_optional_params = filter_exceptions_from_params(optional_params)
+            data = {"model": model, "input": input, **filtered_optional_params}
+
             max_retries = max_retries or litellm.DEFAULT_MAX_RETRIES
             if not isinstance(max_retries, int):
                 raise OpenAIError(status_code=422, message="max retries must be an int")
