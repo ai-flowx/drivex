@@ -4566,12 +4566,16 @@ async def aembedding(*args, **kwargs) -> EmbeddingResponse:
             )
         return response
     except Exception as e:
+        from litellm.litellm_core_utils.core_helpers import filter_exceptions_from_params
+
         custom_llm_provider = custom_llm_provider or "openai"
+        # Filter out callables and exceptions from args to prevent JSON serialization errors
+        filtered_args = filter_exceptions_from_params(args)
         raise exception_type(
             model=model,
             custom_llm_provider=custom_llm_provider,
             original_exception=e,
-            completion_kwargs=args,
+            completion_kwargs=filtered_args,
             extra_kwargs=kwargs,
         )
 
@@ -4741,6 +4745,13 @@ def embedding(  # noqa: PLR0915
     allowed_openai_params: Optional[List[str]] = kwargs.get(
         "allowed_openai_params", None
     )
+
+    # Filter out callable objects from non_default_params before passing to get_optional_params_embeddings
+    # to prevent JSON serialization errors when these params are included in API request data
+    filtered_non_default_params = {
+        k: v for k, v in non_default_params.items() if not callable(v)
+    }
+
     optional_params = get_optional_params_embeddings(
         model=model,
         user=user,
@@ -4748,7 +4759,7 @@ def embedding(  # noqa: PLR0915
         encoding_format=encoding_format,
         custom_llm_provider=custom_llm_provider,
         allowed_openai_params=allowed_openai_params,
-        **non_default_params,
+        **filtered_non_default_params,
     )
 
     ### REGISTER CUSTOM MODEL PRICING -- IF GIVEN ###
