@@ -226,6 +226,7 @@ LLM_CONFIG_NAMES = (
     "AzureOpenAIOSeriesResponsesAPIConfig",
     "XAIResponsesAPIConfig",
     "LiteLLMProxyResponsesAPIConfig",
+    "HostedVLLMResponsesAPIConfig",
     "VolcEngineResponsesAPIConfig",
     "PerplexityResponsesConfig",
     "DatabricksResponsesAPIConfig",
@@ -902,6 +903,10 @@ _LLM_CONFIGS_IMPORT_MAP = {
     "LiteLLMProxyResponsesAPIConfig": (
         ".llms.litellm_proxy.responses.transformation",
         "LiteLLMProxyResponsesAPIConfig",
+    ),
+    "HostedVLLMResponsesAPIConfig": (
+        ".llms.hosted_vllm.responses.transformation",
+        "HostedVLLMResponsesAPIConfig",
     ),
     "VolcEngineResponsesAPIConfig": (
         ".llms.volcengine.responses.transformation",
